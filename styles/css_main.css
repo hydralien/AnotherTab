@@ -1,0 +1,30 @@
+#content {
+		width: 100%;
+		padding: 20px;
+		margin: 20px;
+}
+
+.icon {
+		text-align: center;
+		background-color: #EeEeEe;
+		padding: 10px;
+		overflow: hidden;
+		margin: 10px;
+		float: left;
+}
+
+.icon div {
+		min-width: 60px;
+		min-height: 60px;
+		width: auto;
+}
+
+.icon img {
+		width: 32px;
+		height: 32px;
+}
+
+/*.icon div {
+		position: relative;
+		top: -50%;
+}*/

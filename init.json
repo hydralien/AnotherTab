@@ -1,0 +1,26 @@
+{
+  "type": "object",
+
+  // "properties" maps an optional key of this object to its schema. At the
+  // top-level object, these keys are the policy names supported.
+  "properties": {
+    //"shortcut_size" : {
+    //  "width" : "100px",
+    //  "height" : "100px"
+    //},
+    //"icon_size" : "1
+    //{
+    //  "width" : "48px",
+    //  "height" : "48px"
+    //},
+    "bookmarks_on_page" : {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+    //  1,
+    //  2
+    //]
+  }
+}
