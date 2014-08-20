@@ -3,6 +3,24 @@
     "message" : "Replacement for the New Tab page",
     "description" : "main app description"
   },
+
+  "settings" : {
+    "message" : "Toggle settings",
+    "description" : "Settings toggler title"
+  },
+  "extensions" : {
+    "message" : "Extensions management page",
+    "description" : "Extensions button title"
+  },
+  "tasks" : {
+    "message" : "Task list",
+    "description" : "Task list button title"
+  },
+  "cleanup" : {
+    "message" : "Clean temporary data (cookies, cache etc.)",
+    "description" : "Cleanup button title"
+  },
+
   "icon_size" : {
     "message" : "Icon size:",
     "description" : "Icon size settings text"
@@ -11,21 +29,42 @@
     "message" : "Chrome default favicon size is 16px",
     "description" : "Icon size settings hint"
   },
+
   "cell_width" : {
     "message" : "Cell width:",
     "description" : "Shortcut cell width"
-  },
-  "cell_height" : {
-    "message" : "Cell height:",
-    "description" : "Shortcut cell height"
   },
   "cell_width_hint" : {
     "message" : "Use pixels (like '60px') or 'none' for auto",
     "description" : "Shortcut cell width hint"
   },
+
+  "cell_max_width" : {
+    "message" : "Cell max width:",
+    "description" : "Shortcut cell max width"
+  },
+  "cell_max_width_hint" : {
+    "message" : "Use pixels (like '60px') or 'none' for auto",
+    "description" : "Shortcut cell max width hint"
+  },
+
+  "cell_height" : {
+    "message" : "Cell height:",
+    "description" : "Shortcut cell height"
+  },
   "cell_height_hint" : {
     "message" : "Use pixels (like '60px') or 'none' for auto",
     "description" : "Shortcut cell height hint"
+  },
+
+  "tools_position" : {
+    "message" : "Toolbox position:",
+    "description" : "Tools (internal icons) position label"
+  },
+  "tools_position_hint" : {
+    "message" : "Position of toolbox, use 'left' or 'right'",
+    "description" : "Toolbox position parameter hint"
   }
+
 }
     

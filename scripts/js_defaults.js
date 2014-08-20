@@ -15,6 +15,17 @@ var config = {
   "cell_width" : {
     "value" : "none",
     "css-target" : ".icon",
-    "css-key" : ["max-width", "min-width"]
+    "css-key" : ["min-width"]
+  },
+  "cell_max_width" : {
+    "value" : "none",
+    "css-target" : ".icon",
+    "css-key" : ["max-width"]
+  },
+  "tools_position" : {
+    "value" : "right",
+    "css-target" : ".tools",
+    "css-key" : ["left", "right"]
   }
+
 };

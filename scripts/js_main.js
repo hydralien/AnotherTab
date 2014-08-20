@@ -1,3 +1,6 @@
+// TODO:
+// pluging management
+// processlist shortcut - http://www.bitfalls.com/2013/09/build-chrome-extension-killing-chrome.html
 
 function removeNavbar() {
   chrome.tabs.getCurrent(function (tab) {
@@ -5,35 +8,76 @@ function removeNavbar() {
   });
 }
 
-function addBookmarks(root_id, target) {
-  var action = function (kids) {
-    for (kid_index = 0; kid_index < kids.length; kid_index++) {
-      kid = kids[kid_index];
-      var img_url = 'chrome://favicon/' + kid['url'];
-      var href = kid['url'];
-      var click = '';
-      if (kid['url'] == undefined) {
-        img_url = 'icons/folder.png';
-        href = '#';
+var nodeBookmark = function (data) {
+  return {
+    id : data.id,
+    title : data.title,
+    imgURL : 'chrome://favicon/' + data.url,
+    href : data.url,
+    click : '',
+    htmlCode : function () {
+      if (this.href == undefined) {
+        this.imgURL = 'icons/folder.png';
+        this.href = '#';
         //javascript:unrollBookmark(' + kid['id'] + ')"';
       }
 
-      target.append(
-          '<a href="' + href + '"' + click + '>' +
-        '<div class="icon" id="bookmark_' + kid['id'] + '">' +
-            '<div>' + 
-              '<img src="' + img_url + '"/>' +
-              '<br/><span>' + kid['title'] + '</span>' + 
-            '</div>' +
+      return '<a href="' + this.href + '"' + this.click + ' title="' + this.title + '">' +
+        '<div class="icon" id="bookmark_' + this.id + '">' +
+        '<div>' + 
+        '<img src="' + this.imgURL + '"/>' +
+        '<br/><span>' + this.title + '</span>' + 
         '</div>' +
-          '</a>'
-      );
-        
-      $('#bookmark_' + kid['id']).click(function () { unrollBookmark(kid['id']) } );
+        '</div>' +
+        '</a>';
+    },
+    clickHandler : function () { unrollBookmark(this.id) }
+  }
+}
+
+var nodeExtension = function (data) {
+  return {
+    id : data.id,
+    title : data.name,
+    imgURL : 'chrome://extension-icon/' + data.id + '/48/1',
+    href : '#',
+    click : '',
+    enabled : data.enabled,
+    htmlCode : function () {
+      return '<a href="' + this.href + '"' + this.click + ' title="' + this.title + '">' +
+        '<div class="icon" id="bookmark_' + this.id + '">' +
+        '<div>' + 
+        '<img src="' + this.imgURL + '"/>' +
+        '<br/><span>' + this.title + '</span>' + 
+        '</div>' +
+        '</div>' +
+        '</a>';
+    },
+    clickHandler : function () { chrome.management.launchApp(data.id); window.close(); }
+  }
+}
+
+function addBookmarks(nodeType, nodeList, target) {
+  var action = function (kids) {
+    for (var kid_index = 0; kid_index < kids.length; kid_index++) {
+      kid = nodeType(kids[kid_index]);
+      if (kid.enabled === false) {
+        continue;
+      }
+      target.append(kid.htmlCode());
+      $('#bookmark_' + kid.id).click(kid.clickHandler);
     }
   };
 
-  chrome.bookmarks.getChildren(root_id, action);
+  nodeList(action);
+}
+
+function addExtensions(root_id, target) {
+  var action = function (kids) {
+    chrome.management.getAll(function (list) {
+      console.log(list)
+    });
+  };
 }
 
 function unrollBookmark(parent_id) {
@@ -62,23 +106,39 @@ function getImage(img_url) {
 }
 
 function syncConfig() {
-  chrome.storage.sync.get(Object.keys(config), function (stored_config) {
-    config = $.extend({}, config, stored_config);
-  });
+  var supported_keys = Object.keys(config);
+  chrome.storage.sync.get(supported_keys, function (stored_config) {
+    for (var key_index = 0; key_index < supported_keys.length; key_index++) {
+      var current_key = supported_keys[key_index];
+      if (stored_config.hasOwnProperty(current_key)) {
+        config[current_key]['value'] = stored_config[current_key];
+      }
+    }
 
-  return config;
+    applyConfig();
+  });
 }
 
 function applyConfigParam(param_name, param_data) {
   if (!param_data) {
     param_data = config[param_name];
   }
+
   var stylesheet = document.styleSheets[0];
   if (param_data['css-target']) {
     var styles = "";
-    $.each(param_data['css-key'], function (key_index, css_key) {
+    for (var key_index = 0; key_index < param_data['css-key'].length; key_index++) {
+      var css_key = param_data['css-key'][key_index];
+      // handle position (left/right/top/bottom) as value
+      if (['left','right','top','bottom'].indexOf(css_key) > -1) {
+        if (css_key == param_data['value']) {
+          styles += css_key + ': 0px; ';
+          break;
+        }
+        continue;
+      }
       styles += css_key + ': ' + param_data['value'] + '; ';
-    });
+    }
     stylesheet.insertRule(param_data['css-target'] + ' {' + styles + '}', stylesheet.cssRules.length);
   }
 }
@@ -86,24 +146,34 @@ function applyConfigParam(param_name, param_data) {
 function saveConfigParam(param_name, param_value) {
   config[param_name]['value'] = param_value;
   var new_setting = {};
-  new_setting[param_name] = config[param_name];
+  new_setting[param_name] = config[param_name]['value'];
+
   chrome.storage.sync.set(new_setting);
 }
 
-function applyConfig(config_to_apply) {
-  var settings_form = "<table>";
+function applyConfig() {
+  var settings_form = '<table>';
 
-  $.each(config_to_apply, function (config_key, config_data) {
-    applyConfigParam(config_key, config_data);
+  var config_keys = Object.keys(config);
+
+  for (var key_index = 0; key_index < config_keys.length; key_index++) {
+    var config_key = config_keys[key_index];
+
+    applyConfigParam(config_key, config[config_key]);
 
     settings_form += '<tr><td class="name">' + chrome.i18n.getMessage(config_key) + '</td>' +
-      '<td class="setting"><input type="text" id="setting_' + config_key + '" value="' + config_data['value'] + '"/><br/>' +
+      '<td class="setting"><input type="text" id="setting_' + config_key + '" value="' + config[config_key]['value'] + '"/><br/>' +
       '<span>' + chrome.i18n.getMessage(config_key + '_hint') + '</span></td></tr>';
-  });
+  };
 
-  settings_form += "</table>";
+  settings_form += '</form>';
 
   $('#settings').html(settings_form);
+  $('#settings input').keyup(function (event) {
+    if (event.keyCode == 13) {
+      toggleSettings(true);
+    }
+  });
 }
 
 function toggleSettings(off) {
@@ -124,13 +194,29 @@ function toggleSettings(off) {
   }
 }
 
+function applyLocale() {
+  var targets = ["settings", "extensions", "tasks", "cleanup"];
 
-// please keep $(document).ready processing at the end of the fiel for convenience
+  $.each(targets,
+         function (target_key, target_id) {
+           $("#" + target_id).attr('title', chrome.i18n.getMessage(target_id));
+         });
+}
+
+function registerEvents() {
+  $('#extensions').click( function () {chrome.tabs.create({url:'chrome://extensions/'})} );
+  $('#cleanup').click( function () {chrome.tabs.create({url:'chrome://settings/clearBrowserData'})} );
+  //$('#settings-form').on('submit', function () { console.log("OHFOR"); toggleSettings(true); return false; });
+}
+
+// please keep $(document).ready processing at the end of the field for convenience
 $(document).ready(function () {
-  addBookmarks('1', $('#content'));
+  addBookmarks(nodeBookmark, function (action) {chrome.bookmarks.getChildren('1', action)}, $('#content-bookmarks'));
+  addBookmarks(nodeExtension, chrome.management.getAll, $('#content-extensions'));
   fillStrings();
-  config = syncConfig();
-  applyConfig(config);
+  syncConfig();
+  applyLocale();
+  registerEvents();
 
   $(document).mouseup(function (e) {
     var container = $("#settings");

@@ -22,8 +22,10 @@
     "bookmarks",
     "contextMenus",
     "geolocation",
+    "management",
+//"experimental", (see http://www.bitfalls.com/2013/09/build-chrome-extension-killing-chrome.html)
+    //"processes",
     "chrome://favicon/",
-    //"location", // experimental
     "http://hydralien.net/"
   ],
   "chrome_url_overrides" : {

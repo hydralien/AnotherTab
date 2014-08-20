@@ -3,7 +3,7 @@ body {
 		margin: 0px;
 }
 
-#content {
+.content {
 		max-height: 100%;
 		overflow-x: hidden;
 		overflow-y: hidden;
@@ -25,9 +25,8 @@ body {
 		max-height: 60px;
 		/* alignment */
     display: flex;
-    align-items: center;
-    justify-content: center;
 
+    justify-content: center;
 }
 
 .icon div {
@@ -38,14 +37,35 @@ body {
 		width: 32px;
 }
 
+.tools {
+		position: fixed;
+}
+
+.trigger {
+		cursor: pointer;
+		padding: 15px;
+		z-index: 2;
+}
+
+.trigger, .trigger img {
+		width: 32px;
+		height: 32px;
+}
+
+#chrome-tools {
+		top: 0px;
+		width: 32px;
+}
+
+#chrome-tools .trigger {
+		float: left;
+}
+
 #settings {
-		position: absolute;
-		left: 100%;
-		top: 100%;
+		bottom: 0%;
 		width: 350px;
-		height: 450px;
-		margin-left: -370px;
-		margin-top: -500px;
+		max-height: 450px;
+		margin: 5px 15px 50px 15px;
 		overflow-x: hidden;
 		overflow-y: scroll;
 		background-color: #ffffff;
@@ -84,15 +104,7 @@ body {
 }
 
 #settings-trigger {
-		position: absolute;
-		left: 100%;
-		top: 100%;
-		width: 32px;
-		height: 32px;
-		margin-left: -50px;
-		margin-top: -50px;
-		cursor: pointer;
-		z-index: 2;
+		bottom: 0px;
 }
 
 /*.icon div {
