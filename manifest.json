@@ -26,10 +26,6 @@
     //"location", // experimental
     "http://hydralien.net/"
   ],
-  "browser_action": {
-    "default_icon": "icons/19.png",
-    "default_popup": "popup.html"
-  },
   "chrome_url_overrides" : {
     "newtab": "main.html"
   },
