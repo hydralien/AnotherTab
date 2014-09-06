@@ -23,7 +23,7 @@
     "contextMenus",
     "geolocation",
     "management",
-//"experimental", (see http://www.bitfalls.com/2013/09/build-chrome-extension-killing-chrome.html)
+    //"experimental", (see http://www.bitfalls.com/2013/09/build-chrome-extension-killing-chrome.html)
     //"processes",
     "chrome://favicon/",
     "http://hydralien.net/"

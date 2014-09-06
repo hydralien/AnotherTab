@@ -44,14 +44,13 @@ var nodeExtension = function (data) {
     click : '',
     enabled : data.enabled,
     htmlCode : function () {
-      return '<a href="' + this.href + '"' + this.click + ' title="' + this.title + '">' +
-        '<div class="icon" id="bookmark_' + this.id + '">' +
+      return '<div class="icon" id="bookmark_' + this.id + '">' +
         '<div>' + 
         '<img src="' + this.imgURL + '"/>' +
         '<br/><span>' + this.title + '</span>' + 
         '</div>' +
-        '</div>' +
-        '</a>';
+        '<div class="hide-item"><a onclick="hideItem(\'' + data.id + '\')">x</a></div>' +
+        '</div>';
     },
     clickHandler : function () { chrome.management.launchApp(data.id); window.close(); }
   }
@@ -61,7 +60,7 @@ function addBookmarks(nodeType, nodeList, target) {
   var action = function (kids) {
     for (var kid_index = 0; kid_index < kids.length; kid_index++) {
       kid = nodeType(kids[kid_index]);
-      if (kid.enabled === false) {
+      if (kid.enabled === false || config.hidden_items.value[kid.id]) {
         continue;
       }
       target.append(kid.htmlCode());
@@ -160,6 +159,10 @@ function applyConfig() {
     var config_key = config_keys[key_index];
 
     applyConfigParam(config_key, config[config_key]);
+
+    if (!config['css-target']) {
+      continue;
+    }
 
     settings_form += '<tr><td class="name">' + chrome.i18n.getMessage(config_key) + '</td>' +
       '<td class="setting"><input type="text" id="setting_' + config_key + '" value="' + config[config_key]['value'] + '"/><br/>' +

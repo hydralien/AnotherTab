@@ -26,6 +26,8 @@ var config = {
     "value" : "right",
     "css-target" : ".tools",
     "css-key" : ["left", "right"]
-  }
-
+  },
+  "hidden_items" : {
+    "value" : {"iblacnngifeaffffeppbnmbmcafmmnpg" : 1}
+  },
 };
