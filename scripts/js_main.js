@@ -234,6 +234,7 @@ function registerEvents() {
   $('#cleanup').click( function () {chrome.tabs.create({url:'chrome://settings/clearBrowserData'})} );
   $('#params').click( function () {chrome.tabs.create({url:'chrome://settings'})} );
   $('#cookies').click( function () {chrome.tabs.create({url:'chrome://settings/cookies'})} );
+  $('#passwords').click( function () {chrome.tabs.create({url:'chrome://settings/passwords'})} );
   $('#settings-form').on('submit', function () { console.log("OHFOR"); toggleSettings(true); return false; });
 }
 
