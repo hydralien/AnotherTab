@@ -23,7 +23,7 @@ var nodeBookmark = function (data) {
       }
 
       return '<a href="' + this.href + '"' + this.click + ' title="' + this.title + '">' +
-        '<div class="icon" id="bookmark_' + this.id + '">' +
+        '<div class="icon-wrapper icon" id="bookmark_' + this.id + '">' +
         '<div>' + 
         '<img src="' + this.imgURL + '"/>' +
         '<br/><span>' + this.title + '</span>' + 
@@ -44,16 +44,22 @@ var nodeExtension = function (data) {
     click : '',
     enabled : data.enabled,
     htmlCode : function () {
-      return '<div class="icon" id="bookmark_' + this.id + '">' +
-        '<div>' + 
-        '<img src="' + this.imgURL + '"/>' +
-        '<br/><span>' + this.title + '</span>' + 
-        '</div>' +
-        '<div class="hide-item"><a onclick="hideItem(\'' + data.id + '\')">x</a></div>' +
-        '</div>';
+      return '<div class="icon-wrapper">' +
+             ' <div class="icon" id="bookmark_' + this.id + '">' +
+             '  <div class="icon-image">' + 
+             '    <img src="' + this.imgURL + '"/>' +
+             '    <br/><span>' + this.title + '</span>' + 
+             '  </div>' +
+             ' </div>' +
+             ' <div class="hide-item" item_id="' + data.id + '">x</div>' +
+             '</div>';
     },
     clickHandler : function () { chrome.management.launchApp(data.id); window.close(); }
   }
+}
+
+function getConfig() {
+    return config;
 }
 
 function addBookmarks(nodeType, nodeList, target) {
@@ -66,6 +72,8 @@ function addBookmarks(nodeType, nodeList, target) {
       target.append(kid.htmlCode());
       $('#bookmark_' + kid.id).click(kid.clickHandler);
     }
+
+    target.find('.hide-item').click(hideItem);
   };
 
   nodeList(action);
@@ -118,6 +126,21 @@ function syncConfig() {
   });
 }
 
+function hideItem() {
+    var hide_id = $(this).attr('item_id');
+    var hide_object = $(this);
+
+    chrome.storage.sync.get(['hidden_items'], function (saved_parameters) {
+        console.log("HIDEID", hide_id, saved_parameters);
+
+        saved_parameters['hidden_items']['value'][hide_id] = 1;
+
+        saveConfigParam('hidden_items', saved_parameters['hidden_items'])
+
+        hide_object.parent().hide();
+    });
+}
+
 function applyConfigParam(param_name, param_data) {
   if (!param_data) {
     param_data = config[param_name];
@@ -151,7 +174,7 @@ function saveConfigParam(param_name, param_value) {
 }
 
 function applyConfig() {
-  var settings_form = '<table>';
+  var settings_form = '<table><form id="settings-form">';
 
   var config_keys = Object.keys(config);
 
@@ -160,7 +183,7 @@ function applyConfig() {
 
     applyConfigParam(config_key, config[config_key]);
 
-    if (!config['css-target']) {
+    if (!config[config_key]['css-target']) {
       continue;
     }
 
@@ -169,7 +192,7 @@ function applyConfig() {
       '<span>' + chrome.i18n.getMessage(config_key + '_hint') + '</span></td></tr>';
   };
 
-  settings_form += '</form>';
+  settings_form += '</form></table>';
 
   $('#settings').html(settings_form);
   $('#settings input').keyup(function (event) {
@@ -209,15 +232,17 @@ function applyLocale() {
 function registerEvents() {
   $('#extensions').click( function () {chrome.tabs.create({url:'chrome://extensions/'})} );
   $('#cleanup').click( function () {chrome.tabs.create({url:'chrome://settings/clearBrowserData'})} );
-  //$('#settings-form').on('submit', function () { console.log("OHFOR"); toggleSettings(true); return false; });
+  $('#params').click( function () {chrome.tabs.create({url:'chrome://settings'})} );
+  $('#cookies').click( function () {chrome.tabs.create({url:'chrome://settings/cookies'})} );
+  $('#settings-form').on('submit', function () { console.log("OHFOR"); toggleSettings(true); return false; });
 }
 
 // please keep $(document).ready processing at the end of the field for convenience
 $(document).ready(function () {
+  syncConfig();
   addBookmarks(nodeBookmark, function (action) {chrome.bookmarks.getChildren('1', action)}, $('#content-bookmarks'));
   addBookmarks(nodeExtension, chrome.management.getAll, $('#content-extensions'));
   fillStrings();
-  syncConfig();
   applyLocale();
   registerEvents();
 
