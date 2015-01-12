@@ -125,4 +125,5 @@ body {
     height: 30px;
     background-color: red;
     cursor: pointer;
+		display: none;
 }

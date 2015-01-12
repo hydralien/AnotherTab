@@ -20,16 +20,22 @@ var nodeBookmark = function (data) {
         this.imgURL = 'icons/folder.png';
         this.href = '#';
         //javascript:unrollBookmark(' + kid['id'] + ')"';
-      }
+      } else if (!this.href.match(/^http/)) {
+				this.imgURL = 'chrome://favicon/';
+				this.href = encodeURI(this.href);
+			}
 
-      return '<a href="' + this.href + '"' + this.click + ' title="' + this.title + '">' +
-        '<div class="icon-wrapper icon" id="bookmark_' + this.id + '">' +
-        '<div>' + 
-        '<img src="' + this.imgURL + '"/>' +
-        '<br/><span>' + this.title + '</span>' + 
-        '</div>' +
-        '</div>' +
-        '</a>';
+      return '<div class="icon-wrapper">' +
+        ' <a href="' + this.href + '"' + this.click + ' title="' + this.title + '">' +
+        '  <div class="icon" id="bookmark_' + this.id + '">' +
+        '   <div class="icon-image">' + 
+        '     <img src="' + this.imgURL + '"/>' +
+        '   </div>' +
+				        '     <span>' + this.title + '</span>' + 
+        '  </div>' +
+        ' </a>' +
+        ' <div class="hide-item" item_id="' + data.id + '">x</div>' +
+        '</div>';
     },
     clickHandler : function () { unrollBookmark(this.id) }
   }
@@ -127,18 +133,25 @@ function syncConfig() {
 }
 
 function hideItem() {
-    var hide_id = $(this).attr('item_id');
-    var hide_object = $(this);
+  var hide_id = $(this).attr('item_id');
+  var hide_object = $(this);
 
-    chrome.storage.sync.get(['hidden_items'], function (saved_parameters) {
-        console.log("HIDEID", hide_id, saved_parameters);
+  chrome.storage.sync.get(['hidden_items'], function (saved_parameters) {
+    var hidden_items = {'hidden_items':
+												{'value' :
+												 {}
+												}
+											 };
+		if (saved_parameters['hidden_items'] && saved_parameters['hidden_items']['value']) {
+			hidden_items = saved_parameters['hidden_items'];
+		}
 
-        saved_parameters['hidden_items']['value'][hide_id] = 1;
+		hidden_items['value'][hide_id] = 1;
 
-        saveConfigParam('hidden_items', saved_parameters['hidden_items'])
+    saveConfigParam('hidden_items', hidden_items)
 
-        hide_object.parent().hide();
-    });
+    hide_object.parent().hide();
+  });
 }
 
 function applyConfigParam(param_name, param_data) {
@@ -203,6 +216,10 @@ function applyConfig() {
 }
 
 function toggleSettings(off) {
+  if (off && $('#settings').is(":hidden")) {
+    return true;
+  }
+
   if (off) {
     $('#settings').hide();
   } else {
@@ -218,6 +235,8 @@ function toggleSettings(off) {
       }
     });
   }
+
+	return true;
 }
 
 function applyLocale() {
@@ -235,6 +254,7 @@ function registerEvents() {
   $('#params').click( function () {chrome.tabs.create({url:'chrome://settings'})} );
   $('#cookies').click( function () {chrome.tabs.create({url:'chrome://settings/cookies'})} );
   $('#passwords').click( function () {chrome.tabs.create({url:'chrome://settings/passwords'})} );
+  $('#edit').click( function () { $('.hide-item').toggle() } );
   $('#settings-form').on('submit', function () { console.log("OHFOR"); toggleSettings(true); return false; });
 }
 
@@ -254,9 +274,9 @@ $(document).ready(function () {
         && container.has(e.target).length === 0) // ... nor a descendant of the container
     {
       if ($('#settings-trigger img').is(e.target)) {// || $('#settings-trigger').has(e.target).length > 0
-        toggleSettings();
+        return toggleSettings();
       } else {
-        toggleSettings(true);
+        return toggleSettings(true);
       }
     }
   });
