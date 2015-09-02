@@ -124,7 +124,7 @@ function syncConfig() {
     for (var key_index = 0; key_index < supported_keys.length; key_index++) {
       var current_key = supported_keys[key_index];
       if (stored_config.hasOwnProperty(current_key)) {
-        config[current_key]['value'] = stored_config[current_key];
+        config[current_key]['value'] = stored_config[current_key]['value'] ? stored_config[current_key]['value'] : stored_config[current_key];
       }
     }
 
@@ -137,20 +137,18 @@ function hideItem() {
   var hide_object = $(this);
 
   chrome.storage.sync.get(['hidden_items'], function (saved_parameters) {
-    var hidden_items = {'hidden_items':
-												{'value' :
-												 {}
-												}
-											 };
+    var hidden_items = {
+			'value' : {}
+		};
 		if (saved_parameters['hidden_items'] && saved_parameters['hidden_items']['value']) {
 			hidden_items = saved_parameters['hidden_items'];
 		}
 
 		hidden_items['value'][hide_id] = 1;
 
-    saveConfigParam('hidden_items', hidden_items)
+		saveConfigParam('hidden_items', hidden_items['value'])
 
-    hide_object.parent().hide();
+		hide_object.parent().hide();
   });
 }
 
@@ -181,7 +179,7 @@ function applyConfigParam(param_name, param_data) {
 function saveConfigParam(param_name, param_value) {
   config[param_name]['value'] = param_value;
   var new_setting = {};
-  new_setting[param_name] = config[param_name]['value'];
+  new_setting[param_name] = config[param_name];
 
   chrome.storage.sync.set(new_setting);
 }
