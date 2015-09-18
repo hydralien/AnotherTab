@@ -12,25 +12,25 @@ body {
 }
 
 .icon-wrapper {
-		margin: 10px;
-		float: left;
-		text-align: center;
+	margin: 10px;
+	float: left;
+	text-align: center;
     display: flex;
 }
 
 .icon {
-		text-align: center;
-		background-color: #EeEeEe;
-		border-radius: 5px;
-		padding: 10px;
-		overflow: hidden;
-		min-width: 60px;
-		max-width: none;
-		min-height: 60px;
-		max-height: 60px;
-		/* alignment */
-		cursor: pointer;
-		color: blue;
+	text-align: center;
+	background-color: #EeEeEe;
+	border-radius: 5px;
+	padding: 10px;
+	overflow: hidden;
+	min-width: 60px;
+	max-width: none;
+	min-height: 60px;
+	max-height: 60px;
+	/* alignment */
+	cursor: pointer;
+	color: blue;
     justify-content: center;
 }
 
@@ -42,6 +42,16 @@ body {
 		width: 32px;
 }
 
+.folder-layer {
+	margin: -1px;
+	float: left;
+	text-align: center;
+    display: flex;
+    background-color: chartreuse;
+    vertical-align: middle;
+	border-radius: 5px;
+    border: 1px solid black;
+}
 
 .tools {
 		position: fixed;

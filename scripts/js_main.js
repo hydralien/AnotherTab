@@ -9,36 +9,31 @@ function removeNavbar() {
 }
 
 var nodeBookmark = function (data) {
-  return {
-    id : data.id,
-    title : data.title,
-    imgURL : 'chrome://favicon/' + data.url,
-    href : data.url,
-    click : '',
-    htmlCode : function () {
-      if (this.href == undefined) {
-        this.imgURL = 'icons/folder.png';
-        this.href = '#';
-        //javascript:unrollBookmark(' + kid['id'] + ')"';
-      } else if (!this.href.match(/^http/)) {
-				this.imgURL = 'chrome://favicon/';
-				this.href = encodeURI(this.href);
-			}
+    var node = {
+        id : data.id,
+        bookmark: true,
+        title : data.title,
+        imgURL : 'chrome://favicon/' + data.url,
+        href : data.url,
+        folder : data.url == undefined,
+        click : '',
+        htmlCode : function () {
+            if (this.folder) {
+                this.imgURL = 'icons/folder.png';
+                this.href = '#';
+                //javascript:unrollBookmark(' + kid['id'] + ')"';
+            } else if (!this.href.match(/^http/)) {
+			    this.imgURL = 'chrome://favicon/';
+			    this.href = encodeURI(this.href);
+		    }
+            
+            return Mark.up(templates.bookmark, {item: this, data: data});
+        },
+    };
 
-      return '<div class="icon-wrapper">' +
-        ' <a href="' + this.href + '"' + this.click + ' title="' + this.title + '">' +
-        '  <div class="icon" id="bookmark_' + this.id + '">' +
-        '   <div class="icon-image">' + 
-        '     <img src="' + this.imgURL + '"/>' +
-        '   </div>' +
-				        '     <span>' + this.title + '</span>' + 
-        '  </div>' +
-        ' </a>' +
-        ' <div class="hide-item" item_id="' + data.id + '">x</div>' +
-        '</div>';
-    },
-    clickHandler : function () { unrollBookmark(this.id) }
-  }
+    node.clickHandler = $.proxy(function () { unrollBookmark(this) }, node);
+
+    return node;
 }
 
 var nodeExtension = function (data) {
@@ -50,15 +45,7 @@ var nodeExtension = function (data) {
     click : '',
     enabled : data.enabled,
     htmlCode : function () {
-      return '<div class="icon-wrapper">' +
-             ' <div class="icon" id="bookmark_' + this.id + '">' +
-             '  <div class="icon-image">' + 
-             '    <img src="' + this.imgURL + '"/>' +
-             '    <br/><span>' + this.title + '</span>' + 
-             '  </div>' +
-             ' </div>' +
-             ' <div class="hide-item" item_id="' + data.id + '">x</div>' +
-             '</div>';
+      return Mark.up(templates.bookmark, {item: this, data: data});
     },
     clickHandler : function () { chrome.management.launchApp(data.id); window.close(); }
   }
@@ -93,9 +80,26 @@ function addExtensions(root_id, target) {
   };
 }
 
-function unrollBookmark(parent_id) {
-  var parent = $('#bookmark_' + parent_id);
-  console.log('yet to come');
+function unrollBookmark(parent) {
+    var parentNode = $('#bookmark_' + parent.id);
+
+
+    if ($('#folder_' + parent.id).length > 0) {
+        $('#folder_' + parent.id).remove();
+        return;
+    }
+    
+    var folderHolder = $(Mark.up(templates.folder, parent));
+    //folderHolder.append(parent.htmlCode());
+    parentNode.closest('.icon-wrapper').after(folderHolder);
+
+    addBookmarks(
+        nodeBookmark,
+        function (action) {
+            chrome.bookmarks.getChildren(parent.id, action)
+        },
+        folderHolder
+    );
 }
 
 function fillStrings(locale) {
