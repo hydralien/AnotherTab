@@ -42,16 +42,11 @@ body {
 		width: 32px;
 }
 
-.folder-layer {
-	margin: -1px;
-	float: left;
-	text-align: center;
-    display: flex;
+.folder .icon {
     background-color: chartreuse;
-    vertical-align: middle;
-	border-radius: 5px;
     border: 1px solid black;
 }
+
 
 .tools {
 		position: fixed;

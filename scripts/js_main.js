@@ -16,6 +16,7 @@ var nodeBookmark = function (data) {
         imgURL : 'chrome://favicon/' + data.url,
         href : data.url,
         folder : data.url == undefined,
+        parent : data.parentId,
         click : '',
         htmlCode : function () {
             if (this.folder) {
@@ -62,7 +63,13 @@ function addBookmarks(nodeType, nodeList, target) {
       if (kid.enabled === false || config.hidden_items.value[kid.id]) {
         continue;
       }
-      target.append(kid.htmlCode());
+        var kidNode = $(kid.htmlCode());
+        if (target.hasClass('icon-wrapper')) {
+            kidNode.addClass('folder');
+            target.after(kidNode);
+        } else {
+            target.append(kidNode);
+        }
       $('#bookmark_' + kid.id).click(kid.clickHandler);
     }
 
@@ -84,21 +91,17 @@ function unrollBookmark(parent) {
     var parentNode = $('#bookmark_' + parent.id);
 
 
-    if ($('#folder_' + parent.id).length > 0) {
-        $('#folder_' + parent.id).remove();
+    if ($('.child-of-' + parent.id).length > 0) {
+        $('.child-of-' + parent.id).remove();
         return;
     }
     
-    var folderHolder = $(Mark.up(templates.folder, parent));
-    //folderHolder.append(parent.htmlCode());
-    parentNode.closest('.icon-wrapper').after(folderHolder);
-
     addBookmarks(
         nodeBookmark,
         function (action) {
             chrome.bookmarks.getChildren(parent.id, action)
         },
-        folderHolder
+        parentNode.closest('.icon-wrapper')
     );
 }
 
