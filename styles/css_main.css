@@ -32,6 +32,12 @@ body {
 	cursor: pointer;
 	color: blue;
     justify-content: center;
+    border: 1px solid transparent;
+}
+
+.icon:hover {
+	background-color: #dedede;
+    border: 1px solid green;
 }
 
 .icon .icon-image {
@@ -47,6 +53,9 @@ body {
     border: 1px solid black;
 }
 
+.folder:hover .icon:hover {
+    background-color: lime;
+}
 
 .tools {
 		position: fixed;
