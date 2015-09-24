@@ -265,7 +265,10 @@ function registerEvents() {
   $('#params').click( function () {chrome.tabs.create({url:'chrome://settings'})} );
   $('#cookies').click( function () {chrome.tabs.create({url:'chrome://settings/cookies'})} );
   $('#passwords').click( function () {chrome.tabs.create({url:'chrome://settings/passwords'})} );
-  $('#edit').click( function () { $('.hide-item').toggle() } );
+  $('#edit').click( function () {
+		$('.hide-item').toggle();
+		$('.icon-wrapper').attr('draggable', $('.icon-wrapper').attr('draggable') == 'true' ? 'false' : 'true' ); 
+	});
   $('#settings-form').on('submit', function () { console.log("OHFOR"); toggleSettings(true); return false; });
 }
 
