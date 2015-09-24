@@ -58,6 +58,10 @@ function getConfig() {
 
 function addBookmarks(nodeType, nodeList, target) {
   var action = function (kids) {
+      if (target.hasClass('icon-wrapper')) {
+          kids.reverse();
+      }
+
     for (var kid_index = 0; kid_index < kids.length; kid_index++) {
       kid = nodeType(kids[kid_index]);
       if (kid.enabled === false || config.hidden_items.value[kid.id]) {
