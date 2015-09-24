@@ -129,7 +129,7 @@ function getImage(img_url) {
   xhr.send();
 }
 
-function syncConfig() {
+function syncConfig(callback) {
   var supported_keys = Object.keys(config);
   chrome.storage.sync.get(supported_keys, function (stored_config) {
     for (var key_index = 0; key_index < supported_keys.length; key_index++) {
@@ -140,6 +140,8 @@ function syncConfig() {
     }
 
     applyConfig();
+
+		callback();
   });
 }
 
@@ -269,12 +271,13 @@ function registerEvents() {
 
 // please keep $(document).ready processing at the end of the field for convenience
 $(document).ready(function () {
-  syncConfig();
-  addBookmarks(nodeBookmark, function (action) {chrome.bookmarks.getChildren('1', action)}, $('#content-bookmarks'));
-  addBookmarks(nodeExtension, chrome.management.getAll, $('#content-extensions'));
-  fillStrings();
-  applyLocale();
-  registerEvents();
+  syncConfig(function () {
+    addBookmarks(nodeBookmark, function (action) {chrome.bookmarks.getChildren('1', action)}, $('#content-bookmarks'));
+    addBookmarks(nodeExtension, chrome.management.getAll, $('#content-extensions'));
+    fillStrings();
+    applyLocale();
+    registerEvents();
+  });
 
   $(document).mouseup(function (e) {
     var container = $("#settings");
