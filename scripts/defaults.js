@@ -30,4 +30,8 @@ var config = {
   "hidden_items" : {
     "value" : {"iblacnngifeaffffeppbnmbmcafmmnpg" : 1}
   },
+  "bookmarks_root" : {
+    "value" : '1'
+  },
+
 };
