@@ -11,7 +11,7 @@ var templates = {
 </div>\
   </a>\
 <div class="hide-item" item_id="{{data.id}}" draggable="false">x</div>\
-<div class="drop-item" item_id="{{data.id}}" draggable="false">d</div>\
+<div class="drop-item {{if item.bookmark|notempty}}type-bookmark{{/if}}" item_id="{{data.id}}" draggable="false">d</div>\
 </div>',
 
 

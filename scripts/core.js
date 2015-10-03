@@ -78,6 +78,7 @@ function addBookmarks(nodeType, nodeList, target) {
     }
 
     target.find('.hide-item').click(hideItem);
+    target.find('.drop-item').click(dropItem);
   };
 
   nodeList(action);
@@ -134,15 +135,35 @@ function syncConfig(callback) {
   chrome.storage.sync.get(supported_keys, function (stored_config) {
     for (var key_index = 0; key_index < supported_keys.length; key_index++) {
       var current_key = supported_keys[key_index];
-      if (stored_config.hasOwnProperty(current_key)) {
-        config[current_key]['value'] = stored_config[current_key]['value'] ? stored_config[current_key]['value'] : stored_config[current_key];
-      }
+      if (stored_config.hasOwnProperty(current_key) && stored_config[current_key]['value']) {
+        config[current_key]['value'] = stored_config[current_key]['value'];
+      } else if (stored_config.hasOwnProperty(current_key) && typeof( stored_config[current_key] ) != 'object') {
+				config[current_key]['value'] = stored_config[current_key];
+			}
     }
 
     applyConfig();
 
 		callback();
   });
+}
+
+function dropItem() {
+	var drop_id = $(this).attr('item_id');
+  var drop_object = $(this);
+
+	if ($(this).hasClass('type-bookmark')) {
+		chrome.bookmarks.remove(drop_id);	
+		drop_object.parent().remove();	
+	} else {
+		chrome.management.uninstall(
+			drop_id,
+			{},
+			function () {
+				drop_object.parent().remove();
+			}
+		);
+	}
 }
 
 function hideItem() {
@@ -220,6 +241,7 @@ function registerEvents() {
   $('#passwords').click( function () {chrome.tabs.create({url:'chrome://settings/passwords'})} );
   $('#edit').click( function () {
 		$('.hide-item').toggle();
+		$('.drop-item').toggle();
 		$('.icon-wrapper').attr('draggable', $('.icon-wrapper').attr('draggable') == 'true' ? 'false' : 'true' ); 
 	});
   $('#settings-form').on('submit', function () { console.log("OHFOR"); toggleSettings(true); return false; });

@@ -137,6 +137,16 @@ body {
 		float: right;
     width: 30px;
     height: 30px;
+    background-color: green;
+    cursor: pointer;
+		display: none;
+}
+
+.drop-item {
+		margin: 16px -15px;
+		float: right;
+    width: 30px;
+    height: 30px;
     background-color: red;
     cursor: pointer;
 		display: none;
