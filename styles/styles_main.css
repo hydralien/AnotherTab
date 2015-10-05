@@ -151,3 +151,15 @@ body {
     cursor: pointer;
 		display: none;
 }
+
+.block-header {
+    margin-top: -35px;
+    padding: 0;
+		color: grey;
+    margin-bottom: 5px;
+}
+
+.block-header h2 {
+		padding: 0;
+		margin: 0;
+}

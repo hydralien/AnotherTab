@@ -217,6 +217,11 @@ function applyLocale() {
          function (target_key, target_id) {
            $("#" + target_id).attr('title', chrome.i18n.getMessage(target_id));
          });
+
+  $.each(["bookmarks_header", "extensions_header"],
+         function (target_key, target_id) {
+					 $("#" + target_id).text(chrome.i18n.getMessage(target_id));
+				 });
 }
 
 function registerEvents() {

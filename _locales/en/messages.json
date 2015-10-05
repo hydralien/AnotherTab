@@ -64,6 +64,14 @@
   "tools_position_hint" : {
     "message" : "Position of toolbox, use 'left' or 'right'",
     "description" : "Toolbox position parameter hint"
+  },
+	"bookmarks_header" : {
+    "message" : "Bookmarks",
+    "description" : "Title of a bookmarks block"
+  },
+	"extensions_header" : {
+    "message" : "Extensions",
+    "description" : "Title of a extensions block"
   }
 
 }
