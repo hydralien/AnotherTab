@@ -1,6 +1,7 @@
 // TODO:
 // pluging management
 // processlist shortcut - http://www.bitfalls.com/2013/09/build-chrome-extension-killing-chrome.html
+var lastDragOver = null;
 
 function removeNavbar() {
   chrome.tabs.getCurrent(function (tab) {
@@ -10,26 +11,27 @@ function removeNavbar() {
 
 var nodeBookmark = function (data) {
     var node = {
-        id : data.id,
-        bookmark: true,
-        title : data.title,
-        imgURL : 'chrome://favicon/' + data.url,
-        href : data.url,
-        folder : data.url == undefined,
-        parent : data.parentId,
-        click : '',
-        htmlCode : function () {
-            if (this.folder) {
-                this.imgURL = 'icons/folder.png';
-                this.href = '#';
-                //javascript:unrollBookmark(' + kid['id'] + ')"';
-            } else if (!this.href.match(/^http/)) {
+      id : data.id,
+      bookmark: true,
+      title : data.title,
+      imgURL : 'chrome://favicon/' + data.url,
+      href : data.url,
+			index: data.index,
+      folder : data.url == undefined,
+      parent : data.parentId,
+      click : '',
+      htmlCode : function () {
+        if (this.folder) {
+          this.imgURL = 'icons/folder.png';
+          this.href = '#';
+          //javascript:unrollBookmark(' + kid['id'] + ')"';
+        } else if (!this.href.match(/^http/)) {
 			    this.imgURL = 'chrome://favicon/';
 			    this.href = encodeURI(this.href);
 		    }
-            
-            return Mark.up(templates.bookmark, {item: this, data: data});
-        },
+        
+        return Mark.up(templates.bookmark, {item: this, data: data});
+      },
     };
 
     node.clickHandler = $.proxy(function () { unrollBookmark(this) }, node);
@@ -40,6 +42,7 @@ var nodeBookmark = function (data) {
 var nodeExtension = function (data) {
   return {
     id : data.id,
+		index: data.index,
     title : data.name,
     imgURL : 'chrome://extension-icon/' + data.id + '/48/1',
     href : '#',
@@ -64,9 +67,13 @@ function addBookmarks(nodeType, nodeList, target) {
 
     for (var kid_index = 0; kid_index < kids.length; kid_index++) {
       kid = nodeType(kids[kid_index]);
-      if (kid.enabled === false || config.hidden_items.value[kid.id]) {
+      if (kid.enabled === false) {
         continue;
       }
+			if (config.hidden_items.value[kid.id]) {
+				kid.hidden = true;
+			}
+
         var kidNode = $(kid.htmlCode());
         if (target.hasClass('icon-wrapper')) {
             kidNode.addClass('folder');
@@ -77,7 +84,9 @@ function addBookmarks(nodeType, nodeList, target) {
       $('#bookmark_' + kid.id).click(kid.clickHandler);
     }
 
-    target.find('.hide-item').click(hideItem);
+    target.find('.hide-item').click(toggleItem);
+    target.find('.show-item').click(toggleItem);
+
     target.find('.drop-item').click(dropItem);
   };
 
@@ -113,8 +122,6 @@ function unrollBookmark(parent) {
 function fillStrings(locale) {
   var current_locale = chrome.i18n.getMessage("@@ui_locale");
   var main_desc = chrome.i18n.getMessage("main_description");
-
-  console.log("LOC: " + current_locale + " / " + main_desc);
 }
 
 function getImage(img_url) {
@@ -166,24 +173,50 @@ function dropItem() {
 	}
 }
 
-function hideItem() {
-  var hide_id = $(this).attr('item_id');
-  var hide_object = $(this);
+function toggleItem() {
+  var toggle_id = $(this).attr('item_id');
+  var toggle_object = $(this);
 
-  chrome.storage.sync.get(['hidden_items'], function (saved_parameters) {
-    var hidden_items = {
-			'value' : {}
-		};
-		if (saved_parameters['hidden_items'] && saved_parameters['hidden_items']['value']) {
-			hidden_items = saved_parameters['hidden_items'];
-		}
+	if (toggle_object.hasClass('show-item')) {
+		chrome.storage.sync.get(['hidden_items'], function (saved_parameters) {
+			var hidden_items = {
+				'value' : {}
+			};
+			if (saved_parameters['hidden_items'] && saved_parameters['hidden_items']['value']) {
+				hidden_items = saved_parameters['hidden_items'];
+			}
 
-		hidden_items['value'][hide_id] = 1;
+			if (hidden_items['value'][toggle_id]) {
+				delete hidden_items['value'][toggle_id];
+			}
 
-		saveConfigParam('hidden_items', hidden_items['value'])
+			saveConfigParam('hidden_items', hidden_items['value'])
 
-		hide_object.parent().hide();
-  });
+			toggle_object.parent().removeClass('item-hidden');
+			toggle_object.removeClass('show-item');
+			toggle_object.addClass('hide-item');
+		});
+	} else {
+		var hide_id = $(this).attr('item_id');
+		var hide_object = $(this);
+
+		chrome.storage.sync.get(['hidden_items'], function (saved_parameters) {
+			var hidden_items = {
+				'value' : {}
+			};
+			if (saved_parameters['hidden_items'] && saved_parameters['hidden_items']['value']) {
+				hidden_items = saved_parameters['hidden_items'];
+			}
+
+			hidden_items['value'][hide_id] = 1;
+
+			saveConfigParam('hidden_items', hidden_items['value'])
+
+			hide_object.parent().addClass('item-hidden').css({display: 'flex'});
+			toggle_object.removeClass('hide-item');
+			toggle_object.addClass('show-item');
+		});
+	}
 }
 
 function toggleSettings(off) {
@@ -245,11 +278,46 @@ function registerEvents() {
   $('#cookies').click( function () {chrome.tabs.create({url:'chrome://settings/cookies'})} );
   $('#passwords').click( function () {chrome.tabs.create({url:'chrome://settings/passwords'})} );
   $('#edit').click( function () {
+		if ($('.item-hidden').css('display') == 'none') {
+			$('.item-hidden').css({display: 'flex'});
+		} else {
+			$('.item-hidden').css({display: 'none'});
+		}
 		$('.hide-item').toggle();
+		$('.show-item').toggle();
 		$('.drop-item').toggle();
-		$('.icon-wrapper').attr('draggable', $('.icon-wrapper').attr('draggable') == 'true' ? 'false' : 'true' ); 
+		$('.icon-wrapper.item-bookmark').attr('draggable', $('.icon-wrapper').attr('draggable') == 'true' ? 'false' : 'true' ); 
+		$('.icon-wrapper.item-bookmark').bind(
+			'dragover',
+			function () {
+				$(this).css('margin-right', '30px');
+				lastDragOver = this;
+			}
+		);
+		$('.icon-wrapper.item-bookmark').bind(
+			'dragleave',
+			function () {
+				$(this).css('margin-right', '10px');
+			}
+		);
+		$('.icon-wrapper.item-bookmark').bind(
+			'dragstart',
+			function () {
+				$(this).css('opacity', '0.4');
+			}
+		);
+		$('.icon-wrapper.item-bookmark').bind(
+			'dragend',
+			function () {
+				$(this).css('opacity', '1');
+				if (lastDragOver != null) {
+					chrome.bookmarks.move($(this).attr('itemid'), {index: parseInt($(lastDragOver).attr('itemIndex')) + 1});
+					$(lastDragOver).after(this);
+				}
+			}
+		);
 	});
-  $('#settings-form').on('submit', function () { console.log("OHFOR"); toggleSettings(true); return false; });
+  $('#settings-form').on('submit', function () { toggleSettings(true); return false; });
 }
 
 // please keep $(document).ready processing at the end of the file for convenience
