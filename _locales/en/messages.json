@@ -20,6 +20,30 @@
     "message" : "Clean temporary data (cookies, cache etc.)",
     "description" : "Cleanup button title"
   },
+  "params" : {
+    "message" : "Browser settings",
+    "description" : "Title of Browser Settings shortcut"
+  },
+  "cookies" : {
+    "message" : "Manage browser cookies",
+    "description" : "Title of Cookie Management shortcut"
+  },
+  "passwords" : {
+    "message" : "Manage saved passwords",
+    "description" : "Title of Passwords Management shortcut"
+  },
+  "edit" : {
+    "message" : "Edit and arrange bookmarks list",
+    "description" : "Title of Bookmarks List Edit shortcut"
+  },
+  "bookmarks" : {
+    "message" : "Launch browser Bookmarks Management tool",
+    "description" : "Title of Bookmarks shortcut"
+  },
+  "settings_trigger" : {
+    "message" : "AnotherTab settings",
+    "description" : "Title of AnotherTab Settings shortcut"
+  },
 
   "icon_size" : {
     "message" : "Icon size:",

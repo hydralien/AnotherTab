@@ -1,7 +1,5 @@
-// TODO:
-// pluging management
-// processlist shortcut - http://www.bitfalls.com/2013/09/build-chrome-extension-killing-chrome.html
 var lastDragOver = null;
+var editMode = false;
 
 function removeNavbar() {
   chrome.tabs.getCurrent(function (tab) {
@@ -230,8 +228,14 @@ function toggleSettings(off) {
     $('#settings').toggle();
   }
 
+	$('#settings-trigger').addClass('active');
   if ($('#settings').is(":hidden")) {
+		$('#settings-trigger').removeClass('active');
+
     $.each(config, function (config_key, config_data) {
+			if ($('#setting_' + config_key).length == 0) {
+				return;
+			}
       var new_value = $('#setting_' + config_key).val();
       if (new_value != '' && new_value != config_data['value']) {
         saveConfigParam(config_key, new_value);
@@ -244,7 +248,7 @@ function toggleSettings(off) {
 }
 
 function applyLocale() {
-  var targets = ["settings", "extensions", "tasks", "cleanup"];
+  var targets = ["settings", "extensions", "tasks", "cleanup", "params", "cookies", "passwords", "edit", "bookmarks", "settings_trigger"];
 
   $.each(targets,
          function (target_key, target_id) {
@@ -277,7 +281,9 @@ function registerEvents() {
   $('#params').click( function () {chrome.tabs.create({url:'chrome://settings'})} );
   $('#cookies').click( function () {chrome.tabs.create({url:'chrome://settings/cookies'})} );
   $('#passwords').click( function () {chrome.tabs.create({url:'chrome://settings/passwords'})} );
+  $('#bookmarks').click( function () {chrome.tabs.create({url:'chrome://bookmarks'})} );
   $('#edit').click( function () {
+		editMode = editMode ? false : true;
 		if ($('.item-hidden').css('display') == 'none') {
 			$('.item-hidden').css({display: 'flex'});
 		} else {
@@ -286,7 +292,13 @@ function registerEvents() {
 		$('.hide-item').toggle();
 		$('.show-item').toggle();
 		$('.drop-item').toggle();
-		$('.icon-wrapper.item-bookmark').attr('draggable', $('.icon-wrapper').attr('draggable') == 'true' ? 'false' : 'true' ); 
+		$('.icon-wrapper.item-bookmark').attr('draggable', $('.icon-wrapper').attr('draggable') == 'true' ? 'false' : 'true' );
+
+		if (editMode) {
+			$(this).addClass('active');
+		} else {
+			$(this).removeClass('active');
+		}
 		$('.icon-wrapper.item-bookmark').bind(
 			'dragover',
 			function () {
