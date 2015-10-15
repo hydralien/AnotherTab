@@ -96,7 +96,10 @@
 	"extensions_header" : {
     "message" : "Extensions",
     "description" : "Title of a extensions block"
+  },
+	"root_bookmark_change_link" : {
+		"message" : "change",
+    "description" : "Text for changing root bookmarks folder"
   }
-
 }
     

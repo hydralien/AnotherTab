@@ -19,4 +19,16 @@ draggable="false" itemid="{{item.id}}" itemindex="{{item.index}}">\
 </div>',
 
 
+	root_folders:
+	'<div class="root-selection-holder">\
+{{items}}\
+<a class="root-directory-select" directory_id="{{id}}" title="{{item.title}}" draggable="false">\
+ <div class="icon-image" draggable="false">\
+  <img src="icons/folder.png"/ draggable="false">\
+  <span>{{title}}</span>\
+ </div>\
+</a>\
+{{/items}}\
+</div>'
+	
 }

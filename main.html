@@ -14,11 +14,11 @@
 
 	<body>
 		<div class="content" id="content-bookmarks">
-			<div class="block-header"><h2 id="bookmarks_header"></h2></div>
+			<div class="block-header"><span id="bookmarks_header"></span> (<span id="root_bookmark_name"></span>)</div>
 		</div>
 
 		<div class="content" id="content-extensions">
-			<div class="block-header"><h2 id="extensions_header"></h2></div>
+			<div class="block-header"><span id="extensions_header"></span></div>
 		</div>
 
 		<div id="chrome-tools" class="tools">
@@ -40,14 +40,18 @@
 			<div class="trigger" id="bookmarks">
 				<img src="icons/bookmarks.png"/>
 			</div>
+		</div>
+		<div id="settings" class="tools"></div>
+
+		<div id="settings-holder" class="tools">
 			<div class="trigger" id="edit">
 				<img src="icons/edit.png"/>
 			</div>
+			<div id="settings-trigger" class="trigger">
+				<img src="icons/settings.png"/>
+			</div>
 		</div>
-		<div id="settings" class="tools"></div>
-		<div id="settings-trigger" class="tools trigger">
-			<img src="icons/settings.png"/>
-		</div>
+
 	</body>
 
 </html>

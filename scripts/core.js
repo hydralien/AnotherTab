@@ -255,7 +255,7 @@ function applyLocale() {
            $("#" + target_id).attr('title', chrome.i18n.getMessage(target_id));
          });
 
-  $.each(["bookmarks_header", "extensions_header"],
+  $.each(["bookmarks_header", "extensions_header", "root_bookmark_change_link"],
          function (target_key, target_id) {
 					 $("#" + target_id).text(chrome.i18n.getMessage(target_id));
 				 });
@@ -296,8 +296,20 @@ function registerEvents() {
 
 		if (editMode) {
 			$(this).addClass('active');
+			$('#root_bookmark_name').addClass('edit').click(
+				function () {
+					chrome.bookmarks.getChildren(
+						'2',
+						function (results) {
+							var rootDirs = results.filter(function (item) {return item.url == undefined});
+							$('#root_bookmark_name').after(Mark.up(templates.root_folders, {items: rootDirs}));
+						}
+					)
+				}
+			);
 		} else {
 			$(this).removeClass('active');
+			$('##root_bookmark_name').addClass('edit').unbind('click');
 		}
 		$('.icon-wrapper.item-bookmark').bind(
 			'dragover',
@@ -335,6 +347,14 @@ function registerEvents() {
 // please keep $(document).ready processing at the end of the file for convenience
 $(document).ready(function () {
   syncConfig(function () {
+		chrome.bookmarks.get(
+			config.bookmarks_root.value,
+			function (results) {
+				var rootMark = results[0];
+				$('#root_bookmark_name').text(rootMark.title);
+			}
+		);
+		
     addBookmarks(
 			nodeBookmark,
 			function (action) {
