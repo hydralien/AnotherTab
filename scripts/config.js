@@ -22,12 +22,16 @@ function applyConfigParam(param_name, param_data) {
   }
 }
 
-function saveConfigParam(param_name, param_value) {
+function saveConfigParam(param_name, param_value, callback) {
   config[param_name]['value'] = param_value;
   var new_setting = {};
   new_setting[param_name] = config[param_name];
 
-  chrome.storage.sync.set(new_setting);
+	if (callback) {
+		chrome.storage.sync.set(new_setting, callback);
+	} else {
+		chrome.storage.sync.set(new_setting);
+	}
 }
 
 function applyConfig() {

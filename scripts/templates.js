@@ -14,6 +14,7 @@ draggable="false" itemid="{{item.id}}" itemindex="{{item.index}}">\
  <span draggable="false">{{item.title}}</span>\
 </div>\
   </a>\
+<div class="pick-item" item_id="{{data.id}}" draggable="false">c</div>\
 <div class="{{if item.hidden|empty}}hide-item{{else}}show-item{{/if}}" item_id="{{data.id}}" draggable="false">u/p</div>\
 <div class="drop-item {{if item.bookmark|notempty}}type-bookmark{{/if}}" item_id="{{data.id}}" draggable="false">d</div>\
 </div>',

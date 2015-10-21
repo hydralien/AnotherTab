@@ -7,7 +7,8 @@ body {
 		max-height: 100%;
 		overflow-x: hidden;
 		overflow-y: hidden;
-		padding: 50px 70px;
+		margin: 5px 70px;
+		margin-bottom: 50px;
 		z-index: 1;
 }
 
@@ -139,7 +140,7 @@ body {
 		top: -50%;
 }*/
 
-.hide-item, .show-item {
+.hide-item, .show-item, .pick-item {
 		margin: -15px;
 		float: right;
     width: 30px;
@@ -170,10 +171,9 @@ body {
 }
 
 .block-header {
-    margin-top: -35px;
+		margin: 10px 70px;
     padding: 0;
 		color: grey;
-    margin-bottom: 5px;
 		font-weight: bold;
 		font-size: 14pt;
 }
@@ -194,4 +194,9 @@ body {
 		color: blue;
 		cursor: pointer;
 		
+}
+
+#root-list {
+		display: none;
+		margin: 5px 70px 50px 70px;
 }

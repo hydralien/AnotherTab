@@ -16,6 +16,7 @@ var nodeBookmark = function (data) {
       href : data.url,
 			index: data.index,
       folder : data.url == undefined,
+			foldersOnly: data.foldersOnly,
       parent : data.parentId,
       click : '',
       htmlCode : function () {
@@ -57,14 +58,21 @@ function getConfig() {
     return config;
 }
 
-function addBookmarks(nodeType, nodeList, target) {
+function addBookmarks(nodeType, nodeList, target, foldersOnly) {
   var action = function (kids) {
-      if (target.hasClass('icon-wrapper')) {
-          kids.reverse();
-      }
+    if (target.hasClass('icon-wrapper')) {
+      kids.reverse();
+    }
+
+		if (foldersOnly) {
+			kids = kids.filter(function (item) {return item.url == undefined});
+		}
 
     for (var kid_index = 0; kid_index < kids.length; kid_index++) {
-      kid = nodeType(kids[kid_index]);
+			var kidData = kids[kid_index];
+			kidData.foldersOnly = foldersOnly;
+			
+      kid = nodeType(kidData);
       if (kid.enabled === false) {
         continue;
       }
@@ -72,20 +80,32 @@ function addBookmarks(nodeType, nodeList, target) {
 				kid.hidden = true;
 			}
 
-        var kidNode = $(kid.htmlCode());
-        if (target.hasClass('icon-wrapper')) {
-            kidNode.addClass('folder');
-            target.after(kidNode);
-        } else {
-            target.append(kidNode);
-        }
-      $('#bookmark_' + kid.id).click(kid.clickHandler);
+      var kidNode = $(kid.htmlCode());
+
+			if (editMode) {
+				if (foldersOnly) {
+					kidNode.find('.pick-item').toggle();
+				} else {
+					kidNode.find('.hide-item').toggle();
+					kidNode.find('.show-item').toggle();
+					kidNode.find('.drop-item').toggle();
+				}
+			}
+
+			kidNode.find('.hide-item').click(toggleItem);
+			kidNode.find('.show-item').click(toggleItem);
+			kidNode.find('.drop-item').click(dropItem);
+			kidNode.find('.pick-item').click(pickItem);
+
+      if (target.hasClass('icon-wrapper')) {
+        kidNode.addClass('folder');
+        target.after(kidNode);
+				target.parent().find('#bookmark_' + kid.id).click(kid.clickHandler);
+      } else {
+        target.append(kidNode);
+				target.find('#bookmark_' + kid.id).click(kid.clickHandler);
+      }
     }
-
-    target.find('.hide-item').click(toggleItem);
-    target.find('.show-item').click(toggleItem);
-
-    target.find('.drop-item').click(dropItem);
   };
 
   nodeList(action);
@@ -100,21 +120,22 @@ function addExtensions(root_id, target) {
 }
 
 function unrollBookmark(parent) {
-    var parentNode = $('#bookmark_' + parent.id);
-
-
-    if ($('.child-of-' + parent.id).length > 0) {
-        $('.child-of-' + parent.id).remove();
-        return;
-    }
+	var container = parent.foldersOnly ? $('#root-list') : $('#content-bookmarks');
+	var parentNode = container.find('#bookmark_' + parent.id);
+			
+  if (container.find('.child-of-' + parent.id).length > 0) {
+    container.find('.child-of-' + parent.id).remove();
+    return;
+  }
     
-    addBookmarks(
-        nodeBookmark,
-        function (action) {
-            chrome.bookmarks.getChildren(parent.id, action)
-        },
-        parentNode.closest('.icon-wrapper')
-    );
+  addBookmarks(
+    nodeBookmark,
+    function (action) {
+      chrome.bookmarks.getChildren(parent.id, action)
+    },
+    parentNode.closest('.icon-wrapper'),
+		parent.foldersOnly
+  );
 }
 
 function fillStrings(locale) {
@@ -169,6 +190,18 @@ function dropItem() {
 			}
 		);
 	}
+}
+
+function pickItem() {
+	var pick_id = $(this).attr('item_id');
+
+	saveConfigParam(
+		'bookmarks_root',
+		pick_id,
+		function () {
+			location.reload();
+		}
+	);
 }
 
 function toggleItem() {
@@ -298,13 +331,24 @@ function registerEvents() {
 			$(this).addClass('active');
 			$('#root_bookmark_name').addClass('edit').click(
 				function () {
-					chrome.bookmarks.getChildren(
-						'2',
-						function (results) {
-							var rootDirs = results.filter(function (item) {return item.url == undefined});
-							$('#root_bookmark_name').after(Mark.up(templates.root_folders, {items: rootDirs}));
-						}
-					)
+					if ($('#root-list').css('display') == 'none') {
+						addBookmarks(
+							nodeBookmark,
+							function (action) {
+								chrome.bookmarks.getChildren(
+									'0',
+									action
+								);
+							},
+							$('#root-list'),
+							true // folders only
+						);
+
+						$('#root-list').css({display: 'inline-block'});
+					} else {
+						$('#root-list').css({display: 'none'});
+						$('#root-list').html('');
+					}
 				}
 			);
 		} else {
