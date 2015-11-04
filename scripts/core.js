@@ -353,7 +353,7 @@ function registerEvents() {
 			);
 		} else {
 			$(this).removeClass('active');
-			$('##root_bookmark_name').addClass('edit').unbind('click');
+			$('#root_bookmark_name').removeClass('edit').unbind('click');
 		}
 		$('.icon-wrapper.item-bookmark').bind(
 			'dragover',
