@@ -1,7 +1,11 @@
 {
-  "main_description" : {
+  "short_name" : {
     "message" : "Замена для стандартной новой вкладки",
     "description" : "Основное описание плагина"
-  }
+  },
+	"main_description" : {
+		"message" : "Использует новую вкладку для показа закладок, предоставляя удобный доступ к часто используемым закладкам",
+		"description" : "main app description"
+	}
 }
     

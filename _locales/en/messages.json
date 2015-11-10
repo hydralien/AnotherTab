@@ -1,6 +1,10 @@
 {
-  "main_description" : {
+  "short_name" : {
     "message" : "Replacement for the New Tab page",
+    "description" : "app's short name"
+  },
+	"main_description" : {
+    "message" : "Uses New Tab page to show bookmarks folder (Bookmarks Bar by default) for quick access to its items and allows to manage it",
     "description" : "main app description"
   },
 

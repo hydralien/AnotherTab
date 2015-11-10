@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-
   "name": "AnotherTab",
+  "short_name": "__MSG_short_name__",
   "description": "__MSG_main_description__",
   "version": "1.0",
   "icons" : {
@@ -23,8 +23,6 @@
     "contextMenus",
     "geolocation",
     "management",
-    //"experimental", (see http://www.bitfalls.com/2013/09/build-chrome-extension-killing-chrome.html)
-    //"processes",
     "chrome://favicon/",
     "http://hydralien.net/"
   ],

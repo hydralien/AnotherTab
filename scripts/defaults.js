@@ -13,17 +13,17 @@ var config = {
     "css-key" : ["min-height", "max-height", "min-width"]
   },
   "cell_width" : {
-    "value" : "none",
+    "value" : "60px",
     "css-target" : ".icon",
     "css-key" : ["min-width"]
   },
   "cell_max_width" : {
-    "value" : "none",
+    "value" : "60px",
     "css-target" : ".icon",
     "css-key" : ["max-width"]
   },
   "tools_position" : {
-    "value" : "right",
+    "value" : "left",
     "css-target" : ".tools",
     "css-key" : ["left", "right"]
   },
