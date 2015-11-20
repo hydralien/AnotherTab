@@ -179,7 +179,11 @@ function dropItem() {
   var drop_object = $(this);
 
 	if ($(this).hasClass('type-bookmark')) {
-		chrome.bookmarks.remove(drop_id);	
+		if ($(this).hasClass('recursive')) {
+			chrome.bookmarks.removeTree(drop_id);
+		} else {
+			chrome.bookmarks.remove(drop_id);
+		}
 		drop_object.parent().remove();	
 	} else {
 		chrome.management.uninstall(

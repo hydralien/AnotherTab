@@ -16,7 +16,7 @@ draggable="false" itemid="{{item.id}}" itemindex="{{item.index}}">\
   </a>\
 <div class="pick-item" item_id="{{data.id}}" draggable="false"></div>\
 <div class="{{if item.hidden|empty}}hide-item{{else}}show-item{{/if}}" item_id="{{data.id}}" draggable="false"></div>\
-<div class="drop-item {{if item.bookmark|notempty}}type-bookmark{{/if}}" item_id="{{data.id}}" draggable="false"></div>\
+<div class="drop-item {{if item.bookmark|notempty}}type-bookmark{{/if}} {{if item.folder|notempty}}recursive{{/if}}" item_id="{{data.id}}" draggable="false"></div>\
 </div>',
 
 
