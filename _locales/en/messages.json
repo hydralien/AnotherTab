@@ -98,7 +98,7 @@
     "description" : "Title of a bookmarks block"
   },
 	"extensions_header" : {
-    "message" : "Extensions",
+    "message" : "Extensions (launch-able)",
     "description" : "Title of a extensions block"
   },
 	"root_bookmark_change_link" : {

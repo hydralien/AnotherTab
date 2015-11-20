@@ -19,6 +19,7 @@ var nodeBookmark = function (data) {
 			foldersOnly: data.foldersOnly,
       parent : data.parentId,
       click : '',
+			enabled: true,
       htmlCode : function () {
         if (this.folder) {
           this.imgURL = 'icons/folder.png';
@@ -46,7 +47,8 @@ var nodeExtension = function (data) {
     imgURL : 'chrome://extension-icon/' + data.id + '/48/1',
     href : '#',
     click : '',
-    enabled : data.enabled,
+    enabled : data.enabled && data.launchType != undefined ? true : false,
+		launch: data.launchType,
     htmlCode : function () {
       return Mark.up(templates.bookmark, {item: this, data: data});
     },
