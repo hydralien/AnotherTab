@@ -22,7 +22,7 @@ body {
 
 .icon {
 	text-align: center;
-	background-color: #EeEeEe;
+	background-color: #DDDEE2;
 	border-radius: 5px;
 	padding: 10px;
 	overflow: hidden;
@@ -38,7 +38,7 @@ body {
 }
 
 .icon:hover {
-	background-color: #dedede;
+	background-color: #EDEEF2;
   border: 1px solid green;
 }
 
@@ -51,12 +51,12 @@ body {
 }
 
 .folder .icon {
-    background-color: chartreuse;
+    background-color: #A0E47C;
     border: 1px solid black;
 }
 
 .folder:hover .icon:hover {
-    background-color: lime;
+    background-color: #C0E49C;
 }
 
 .tools {
@@ -142,7 +142,7 @@ body {
 }*/
 
 .hide-item, .show-item, .pick-item, .drop-item {
-		background-color: white;
+		background-color: #EEF1EB;
 		border: 1px solid white;
 		border-radius: 2px;
 		cursor: pointer;
