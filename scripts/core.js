@@ -359,6 +359,7 @@ function registerEvents() {
 			);
 		} else {
 			$(this).removeClass('active');
+			$('#root-list').css('display', 'none');
 			$('#root_bookmark_name').removeClass('edit').unbind('click');
 		}
 		$('.icon-wrapper.item-bookmark').bind(
