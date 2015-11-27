@@ -45,14 +45,22 @@ var nodeExtension = function (data) {
 		index: data.index,
     title : data.name,
     imgURL : 'chrome://extension-icon/' + data.id + '/48/1',
-    href : '#',
+    href : data.optionsUrl ? data.optionsUrl : '#',
     click : '',
-    enabled : data.enabled && data.launchType != undefined ? true : false,
+    enabled : data.enabled && (data.launchType != undefined || data.optionsUrl) ? true : false,
 		launch: data.launchType,
     htmlCode : function () {
       return Mark.up(templates.bookmark, {item: this, data: data});
     },
-    clickHandler : function () { chrome.management.launchApp(data.id); window.close(); }
+    clickHandler : function (event) {
+			event.preventDefault();
+			if (data.launchType) {
+				chrome.management.launchApp(data.id);
+			} else {
+				chrome.tabs.create({url: data.optionsUrl});
+			}
+			window.close();
+		}
   }
 }
 
