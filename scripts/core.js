@@ -100,6 +100,7 @@ function addBookmarks(nodeType, nodeList, target, foldersOnly) {
 					kidNode.find('.show-item').toggle();
 					kidNode.find('.drop-item').toggle();
 				}
+				kidNode.attr('draggable', 'true');
 			}
 
 			kidNode.find('.hide-item').click(toggleItem);
@@ -370,27 +371,31 @@ function registerEvents() {
 			$('#root-list').css('display', 'none');
 			$('#root_bookmark_name').removeClass('edit').unbind('click');
 		}
-		$('.icon-wrapper.item-bookmark').bind(
+		$(document).on(
 			'dragover',
+			'.icon-wrapper.item-bookmark',
 			function () {
 				$(this).css('margin-right', '30px');
 				lastDragOver = this;
 			}
 		);
-		$('.icon-wrapper.item-bookmark').bind(
+		$(document).on(
 			'dragleave',
+			'.icon-wrapper.item-bookmark',
 			function () {
 				$(this).css('margin-right', '10px');
 			}
 		);
-		$('.icon-wrapper.item-bookmark').bind(
+		$(document).on(
 			'dragstart',
+			'.icon-wrapper.item-bookmark',
 			function () {
 				$(this).css('opacity', '0.4');
 			}
 		);
-		$('.icon-wrapper.item-bookmark').bind(
+		$(document).on(
 			'dragend',
+			'.icon-wrapper.item-bookmark',
 			function () {
 				$(this).css('opacity', '1');
 				if (lastDragOver != null) {
