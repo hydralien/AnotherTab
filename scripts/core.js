@@ -188,11 +188,18 @@ function syncConfig(callback) {
 function dropItem() {
 	var drop_id = $(this).attr('item_id');
   var drop_object = $(this);
+	var objectName = $(this).siblings('a').attr('title');
 
 	if ($(this).hasClass('type-bookmark')) {
 		if ($(this).hasClass('recursive')) {
+			if ( !confirm( Mark.up(chrome.i18n.getMessage("remove_folder"), {name: objectName}) ) ) {
+				return;
+			}
 			chrome.bookmarks.removeTree(drop_id);
 		} else {
+			if ( !confirm( Mark.up(chrome.i18n.getMessage("remove_bookmark"), {name: objectName}) ) ) {
+				return;
+			}
 			chrome.bookmarks.remove(drop_id);
 		}
 		drop_object.parent().remove();	

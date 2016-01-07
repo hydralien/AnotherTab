@@ -104,6 +104,18 @@
 	"root_bookmark_change_link" : {
 		"message" : "change",
     "description" : "Text for changing root bookmarks folder"
+  },
+	"remove_bookmark" : {
+		"message" : "Do you want to drop the '{{name}}' bookmark?",
+    "description" : "Confirmation of removing the bookmark"
+  },
+	"remove_folder" : {
+		"message" : "Do you want to drop the '{{name}}' bookmarks folder?",
+    "description" : "Confirmation of removing the folder"
+  },
+	"remove_extension" : {
+		"message" : "Do you want to uninstall the '{{name}}' extension?",
+    "description" : "Confirmation of removing the extension"
   }
 }
     
