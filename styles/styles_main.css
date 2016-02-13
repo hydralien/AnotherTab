@@ -18,7 +18,6 @@ body {
 	float: left;
 	text-align: center;
  display: flex;
-	word-break: break-word;
 }
 
 .icon {

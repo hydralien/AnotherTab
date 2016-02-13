@@ -118,7 +118,7 @@ function addBookmarks(nodeType, nodeList, target, foldersOnly) {
       }
 
 						var kidIcon = kidNode.find('.icon');
-						if ( kidIcon[0].scrollHeight > kidIcon[0].offsetHeight ) {
+						if ( kidIcon[0].scrollHeight > kidIcon[0].offsetHeight || kidIcon[0].scrollWidth > kidIcon[0].offsetWidth ) {
 								kidNode.find('.tooltip').tooltipster({
 										animation: 'fade',
 										delay: 200,
