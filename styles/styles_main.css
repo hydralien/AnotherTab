@@ -17,7 +17,8 @@ body {
 	margin: 10px;
 	float: left;
 	text-align: center;
-    display: flex;
+ display: flex;
+	word-break: break-word;
 }
 
 .icon {
@@ -38,8 +39,8 @@ body {
 }
 
 .icon:hover {
-	background-color: #EDEEF2;
-  border: 1px solid green;
+				background-color: #EDEEF2;
+				border: 1px solid green;
 }
 
 .icon .icon-image {
@@ -226,4 +227,18 @@ body {
 #root-list {
 		display: none;
 		margin: 5px 70px 50px 70px;
+}
+
+.anothertab-theme {
+	border-radius: 5px; 
+	border: 1px solid green;
+	background: #EDEEF2;
+	color: #222;
+}
+
+.anothertab-theme .tooltipster-content {
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	line-height: 16px;
+	padding: 8px 10px;
 }

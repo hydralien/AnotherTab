@@ -3,7 +3,7 @@ var editMode = false;
 
 function removeNavbar() {
   chrome.tabs.getCurrent(function (tab) {
-    console.log("TID: " + tab.id);
+    //console.log("TID: " + tab.id);
   });
 }
 
@@ -74,48 +74,62 @@ function addBookmarks(nodeType, nodeList, target, foldersOnly) {
       kids.reverse();
     }
 
-		if (foldersOnly) {
-			kids = kids.filter(function (item) {return item.url == undefined});
-		}
+				if (foldersOnly) {
+						kids = kids.filter(function (item) {return item.url == undefined});
+				}
 
     for (var kid_index = 0; kid_index < kids.length; kid_index++) {
-			var kidData = kids[kid_index];
-			kidData.foldersOnly = foldersOnly;
+						var kidData = kids[kid_index];
+						kidData.foldersOnly = foldersOnly;
 			
       kid = nodeType(kidData);
       if (kid.enabled === false) {
         continue;
       }
-			if (config.hidden_items.value[kid.id]) {
-				kid.hidden = true;
-			}
+						if (config.hidden_items.value[kid.id]) {
+								kid.hidden = true;
+						}
 
       var kidNode = $(kid.htmlCode());
 
-			if (editMode) {
-				if (foldersOnly) {
-					kidNode.find('.pick-item').toggle();
-				} else {
-					kidNode.find('.hide-item').toggle();
-					kidNode.find('.show-item').toggle();
-					kidNode.find('.drop-item').toggle();
-				}
-				kidNode.attr('draggable', 'true');
-			}
+						if (editMode) {
+								if (foldersOnly) {
+										kidNode.find('.pick-item').toggle();
+								} else {
+										kidNode.find('.hide-item').toggle();
+										kidNode.find('.show-item').toggle();
+										kidNode.find('.drop-item').toggle();
+								}
+								kidNode.attr('draggable', 'true');
+						}
 
-			kidNode.find('.hide-item').click(toggleItem);
-			kidNode.find('.show-item').click(toggleItem);
-			kidNode.find('.drop-item').click(dropItem);
-			kidNode.find('.pick-item').click(pickItem);
+						kidNode.find('.hide-item').click(toggleItem);
+						kidNode.find('.show-item').click(toggleItem);
+						kidNode.find('.drop-item').click(dropItem);
+						kidNode.find('.pick-item').click(pickItem);
 
       if (target.hasClass('icon-wrapper')) {
         kidNode.addClass('folder');
         target.after(kidNode);
-				target.parent().find('#bookmark_' + kid.id).click(kid.clickHandler);
+								target.parent().find('#bookmark_' + kid.id).click(kid.clickHandler);
       } else {
         target.append(kidNode);
-				target.find('#bookmark_' + kid.id).click(kid.clickHandler);
+								target.find('#bookmark_' + kid.id).click(kid.clickHandler);
       }
+
+						var kidIcon = kidNode.find('.icon');
+						if ( kidIcon[0].scrollHeight > kidIcon[0].offsetHeight ) {
+								kidNode.find('.tooltip').tooltipster({
+										animation: 'fade',
+										delay: 200,
+										theme: 'anothertab-theme',
+										touchDevices: false,
+										trigger: 'hover',
+										delay: 50,
+										position: 'bottom'
+								});
+						}
+
     }
   };
 
@@ -125,7 +139,7 @@ function addBookmarks(nodeType, nodeList, target, foldersOnly) {
 function addExtensions(root_id, target) {
   var action = function (kids) {
     chrome.management.getAll(function (list) {
-      console.log(list)
+      //console.log(list)
     });
   };
 }
@@ -418,31 +432,33 @@ function registerEvents() {
 // please keep $(document).ready processing at the end of the file for convenience
 $(document).ready(function () {
   syncConfig(function () {
-		chrome.bookmarks.get(
-			config.bookmarks_root.value,
-			function (results) {
-				var rootMark = results[0];
-				$('#root_bookmark_name').text(rootMark.title);
-			}
-		);
+				chrome.bookmarks.get(
+						config.bookmarks_root.value,
+						function (results) {
+								var rootMark = results[0];
+								$('#root_bookmark_name').text(rootMark.title);
+						}
+				);
 		
     addBookmarks(
-			nodeBookmark,
-			function (action) {
-				chrome.bookmarks.getChildren(config.bookmarks_root.value, action)
-			},
-			$('#content-bookmarks')
-		);
+						nodeBookmark,
+						function (action) {
+								chrome.bookmarks.getChildren(config.bookmarks_root.value, action)
+						},
+						$('#content-bookmarks')
+				);
 
     addBookmarks(
-			nodeExtension,
-			chrome.management.getAll,
-			$('#content-extensions')
-		);
+						nodeExtension,
+						chrome.management.getAll,
+						$('#content-extensions')
+				);
 
     fillStrings();
     applyLocale();
     registerEvents();
   });
+
+		$('.tooltip').tooltipster();
 });
 // please keep $(document).ready processing at the end of the file for convenience
