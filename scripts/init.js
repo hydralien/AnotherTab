@@ -1,6 +1,6 @@
 chrome.app.runtime.onLaunched.addListener(function() {
   // Tell your app what to launch and how.
-  alert("Here we crawl!");
+ // alert("Here we crawl!");
 });
 
 chrome.runtime.onSuspend.addListener(function() {

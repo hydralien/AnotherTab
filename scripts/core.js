@@ -14,12 +14,12 @@ var nodeBookmark = function (data) {
       title : data.title,
       imgURL : 'chrome://favicon/' + data.url,
       href : data.url,
-			index: data.index,
+						index: data.index,
       folder : data.url == undefined,
-			foldersOnly: data.foldersOnly,
+						foldersOnly: data.foldersOnly,
       parent : data.parentId,
       click : '',
-			enabled: true,
+						enabled: true,
       htmlCode : function () {
         if (this.folder) {
           this.imgURL = 'icons/folder.png';
@@ -202,7 +202,7 @@ function syncConfig(callback) {
 function dropItem() {
 	var drop_id = $(this).attr('item_id');
   var drop_object = $(this);
-	var objectName = $(this).siblings('a').attr('title');
+	var objectName = $(this).siblings('a').attr('extratitle');
 
 	if ($(this).hasClass('type-bookmark')) {
 		if ($(this).hasClass('recursive')) {
@@ -321,7 +321,8 @@ function applyLocale() {
 
   $.each(targets,
          function (target_key, target_id) {
-           $("#" + target_id).attr('title', chrome.i18n.getMessage(target_id));
+					 var message = chrome.i18n.getMessage(target_id);
+           $("#" + target_id).attr('title', message).attr('extratitle', message);
          });
 
   $.each(["bookmarks_header", "extensions_header", "root_bookmark_change_link"],
