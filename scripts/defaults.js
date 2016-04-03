@@ -33,5 +33,9 @@ var config = {
   "bookmarks_root" : {
     "value" : '1'
   },
-
+  "chrome_icon_cache" : {
+    "value" : '',
+		"type" : 'checkbox',
+		"editable" : true
+  }
 };

@@ -116,6 +116,14 @@
 	"remove_extension" : {
 		"message" : "Do you want to uninstall the '{{name}}' extension?",
     "description" : "Confirmation of removing the extension"
-  }
+  },
+	"chrome_icon_cache" : {
+		"message" : "Chrome icons only",
+    "description" : "Pick icons from Google Chrome cache rather than using website/custom icons"
+	},
+	"chrome_icon_cache_hint" : {
+		"message" : "Always use icons from Google Chrome cache (small but reliable)",
+    "description" : "Hint for icon cache switch"
+	}
 }
     

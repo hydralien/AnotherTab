@@ -1,5 +1,11 @@
 var lastDragOver = null;
 var editMode = false;
+var iconProxy = 'http://hydralien.net/iconproxy/base64/'
+var debugMode = false;
+
+if (debugMode) {
+	iconProxy = 'http://localhost:8082/base64/';
+}
 
 function removeNavbar() {
   chrome.tabs.getCurrent(function (tab) {
@@ -8,18 +14,54 @@ function removeNavbar() {
 }
 
 var nodeBookmark = function (data) {
+	savedIcon = 'chrome://favicon/' + data.url;
+	
+	if (data.url) {	
+		var aLink = document.createElement("a");
+		aLink.href = data.url;
+
+		savedIcon = localStorage.getItem(aLink.hostname);
+		if (config.chrome_icon_cache.value == 'on' || savedIcon == 'n/a') {
+			savedIcon = 'chrome://favicon/' + data.url;
+		}
+		
+		if (!savedIcon) {
+			savedIcon = 'chrome://favicon/' + data.url;1
+			var iconUrl = aLink.hostname;
+			$.get(iconProxy + iconUrl).done(
+				function (encodedImage) {
+					if (!encodedImage) {
+						localStorage.setItem(aLink.hostname, 'n/a');
+						return;
+					}
+					if (debugMode) {
+						return;
+					}
+					localStorage.setItem(aLink.hostname, encodedImage);
+				}
+			).fail(
+				function () {
+					if (debugMode) {
+						return;
+					}
+					localStorage.setItem(aLink.hostname, 'n/a');
+				}
+			);
+		}
+	}
+	
     var node = {
       id : data.id,
       bookmark: true,
       title : data.title,
-      imgURL : 'chrome://favicon/' + data.url,
+      imgURL : savedIcon,
       href : data.url,
-						index: data.index,
+			index: data.index,
       folder : data.url == undefined,
-						foldersOnly: data.foldersOnly,
+			foldersOnly: data.foldersOnly,
       parent : data.parentId,
       click : '',
-						enabled: true,
+			enabled: true,
       htmlCode : function () {
         if (this.folder) {
           this.imgURL = 'icons/folder.png';
@@ -302,10 +344,14 @@ function toggleSettings(off) {
 		$('#settings-trigger').removeClass('active');
 
     $.each(config, function (config_key, config_data) {
-			if ($('#setting_' + config_key).length == 0) {
+			var setting = $('#setting_' + config_key);
+			if (setting.length == 0) {
 				return;
 			}
-      var new_value = $('#setting_' + config_key).val();
+      var new_value = setting.val();
+			if (setting.attr('type') == 'checkbox') {
+				new_value = setting.is(':checked') ? 'on' : 'off';
+			}
       if (new_value != '' && new_value != config_data['value']) {
         saveConfigParam(config_key, new_value);
         applyConfigParam(config_key);

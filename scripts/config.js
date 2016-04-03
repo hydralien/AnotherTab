@@ -44,12 +44,18 @@ function applyConfig() {
 
     applyConfigParam(config_key, config[config_key]);
 
-    if (!config[config_key]['css-target']) {
+    if (!config[config_key]['css-target'] && !config[config_key]['editable']) {
       continue;
     }
 
+		var configValue = 'value="' + config[config_key]['value'] + '"';
+		var configType = 'text';
+		if (config[config_key]['type'] && config[config_key]['type'] == 'checkbox') {
+			configValue = config[config_key]['value'] == 'on' ? 'checked="checked"' : '';
+			configType = 'checkbox';
+		}
     settings_form += '<tr><td class="name">' + chrome.i18n.getMessage(config_key) + '</td>' +
-      '<td class="setting"><input type="text" id="setting_' + config_key + '" value="' + config[config_key]['value'] + '"/><br/>' +
+      '<td class="setting"><input type="' + configType + '" id="setting_' + config_key + '" ' + configValue + '/><br/>' +
       '<span>' + chrome.i18n.getMessage(config_key + '_hint') + '</span></td></tr>';
   };
 
