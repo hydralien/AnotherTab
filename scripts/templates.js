@@ -3,7 +3,7 @@ var templates = {
     bookmark:
     '<div class="icon-wrapper \
 {{if item.parent|notempty}}child-of-{{item.parent}}{{/if}} \
-{{if item.bookmark|notempty}}item-bookmark{{/if}} \
+{{if item.bookmark|notempty}}item-bookmark{{else}}item-extension{{/if}} \
 {{if item.hidden|notempty}}item-hidden{{/if}}" \
 draggable="false" itemid="{{item.id}}" itemindex="{{item.index}}">\
 <a class="tooltip" href="{{item.href}}" {{item.click}} title="{{item.title}}" extratitle="{{item.title}}" draggable="false">\
@@ -17,6 +17,7 @@ draggable="false" itemid="{{item.id}}" itemindex="{{item.index}}">\
 <div class="pick-item" item_id="{{data.id}}" draggable="false"></div>\
 <div class="{{if item.hidden|empty}}hide-item{{else}}show-item{{/if}}" item_id="{{data.id}}" draggable="false"></div>\
 <div class="drop-item {{if item.bookmark|notempty}}type-bookmark{{/if}} {{if item.folder|notempty}}recursive{{/if}}" item_id="{{data.id}}" draggable="false"></div>\
+{{if item.bookmark|notempty}}<div class="edit-item {{if item.bookmark|notempty}}type-bookmark{{/if}}" item_id="{{data.id}}" draggable="false"></div>{{/if}}\
 </div>',
 
 

@@ -141,6 +141,7 @@ function addBookmarks(nodeType, nodeList, target, foldersOnly) {
 										kidNode.find('.hide-item').toggle();
 										kidNode.find('.show-item').toggle();
 										kidNode.find('.drop-item').toggle();
+										kidNode.find('.edit-item').toggle();
 								}
 								kidNode.attr('draggable', 'true');
 						}
@@ -148,6 +149,7 @@ function addBookmarks(nodeType, nodeList, target, foldersOnly) {
 						kidNode.find('.hide-item').click(toggleItem);
 						kidNode.find('.show-item').click(toggleItem);
 						kidNode.find('.drop-item').click(dropItem);
+						kidNode.find('.edit-item').click(editItem);
 						kidNode.find('.pick-item').click(pickItem);
 
       if (target.hasClass('icon-wrapper')) {
@@ -282,6 +284,10 @@ function pickItem() {
 	);
 }
 
+function editItem() {
+	console.log("Editing");
+}
+
 function toggleItem() {
   var toggle_id = $(this).attr('item_id');
   var toggle_object = $(this);
@@ -408,6 +414,7 @@ function registerEvents() {
 		$('.hide-item').toggle();
 		$('.show-item').toggle();
 		$('.drop-item').toggle();
+		$('.edit-item').toggle();
 		$('.icon-wrapper.item-bookmark').attr('draggable', $('.icon-wrapper').attr('draggable') == 'true' ? 'false' : 'true' );
 
 		if (editMode) {
