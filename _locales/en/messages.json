@@ -124,6 +124,10 @@
 	"chrome_icon_cache_hint" : {
 		"message" : "Always use icons from Google Chrome cache (small but reliable)",
     "description" : "Hint for icon cache switch"
-	}
+	},
+  "edit_bookmark" : {
+    "message" : "Editing '{{name}}' bookmark",
+    "description" : "Header for the edit bookmark modal window"
+  }
 }
     

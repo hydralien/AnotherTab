@@ -163,7 +163,7 @@ function addBookmarks(nodeType, nodeList, target, foldersOnly) {
 
 						var kidIcon = kidNode.find('.icon');
 						if ( kidIcon[0].scrollHeight > kidIcon[0].offsetHeight || kidIcon[0].scrollWidth > kidIcon[0].offsetWidth ) {
-								kidNode.find('.tooltip').tooltipster({
+								kidNode.find('.tooltipit').tooltipster({
 										animation: 'fade',
 										delay: 200,
 										theme: 'anothertab-theme',
@@ -286,6 +286,17 @@ function pickItem() {
 
 function editItem() {
 	console.log("Editing");
+	var item_id = $(this).attr('item_id');
+
+	var objectName = $(this).siblings('a').attr('extratitle');
+	var objectUrl = $(this).siblings('a').attr('href');
+	var objectIcon = $(this).siblings('a').find('img').attr('src');
+
+	$('#edit-item-modal #bookmark-edit-name').val( objectName );
+	$('#edit-item-modal #bookmark-edit-url').val( objectUrl );
+	$('#edit-item-modal #bookmark-edit-icon').val( objectIcon );
+	
+	$('#edit-item-modal').modal('show');
 }
 
 function toggleItem() {
@@ -513,6 +524,6 @@ $(document).ready(function () {
     registerEvents();
   });
 
-		$('.tooltip').tooltipster();
+		$('.tooltipit').tooltipster();
 });
 // please keep $(document).ready processing at the end of the file for convenience

@@ -6,7 +6,7 @@ var templates = {
 {{if item.bookmark|notempty}}item-bookmark{{else}}item-extension{{/if}} \
 {{if item.hidden|notempty}}item-hidden{{/if}}" \
 draggable="false" itemid="{{item.id}}" itemindex="{{item.index}}">\
-<a class="tooltip" href="{{item.href}}" {{item.click}} title="{{item.title}}" extratitle="{{item.title}}" draggable="false">\
+<a class="tooltipit" href="{{item.href}}" {{item.click}} title="{{item.title}}" extratitle="{{item.title}}" draggable="false">\
 <div class="icon" id="bookmark_{{item.id}}" draggable="false">\
  <div class="icon-image" draggable="false">\
   <img src="{{item.imgURL}}"/ draggable="false">\
