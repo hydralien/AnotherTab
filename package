@@ -1,0 +1,1 @@
+rm ../AnotherTab.zip ; zip -r ../AnotherTab.zip ./*
