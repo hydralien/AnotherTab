@@ -50,31 +50,31 @@ var nodeBookmark = function (data) {
 		}
 	}
 	
-    var node = {
-      id : data.id,
-      bookmark: true,
-      title : data.title,
-      imgURL : savedIcon,
-      href : data.url,
-			index: data.index,
-      folder : data.url == undefined,
-			foldersOnly: data.foldersOnly,
-      parent : data.parentId,
-      click : '',
-			enabled: true,
-      htmlCode : function () {
-        if (this.folder) {
-          this.imgURL = 'icons/folder.png';
-          this.href = '#';
-          //javascript:unrollBookmark(' + kid['id'] + ')"';
-        } else if (!this.href.match(/^http/)) {
-			    this.imgURL = 'chrome://favicon/';
-			    this.href = encodeURI(this.href);
-		    }
-        
-        return Mark.up(templates.bookmark, {item: this, data: data});
-      },
-    };
+	var node = {
+		id : data.id,
+		bookmark: true,
+		title : data.title,
+		imgURL : savedIcon,
+		href : data.url,
+		index: data.index,
+		folder : data.url == undefined,
+		foldersOnly: data.foldersOnly,
+		parent : data.parentId,
+		click : '',
+		enabled: true,
+		htmlCode : function () {
+			if (this.folder) {
+				this.imgURL = 'icons/folder.png';
+				this.href = '#';
+          		//javascript:unrollBookmark(' + kid['id'] + ')"';
+          	} else if (!this.href.match(/^http/)) {
+          		this.imgURL = 'chrome://favicon/';
+          		this.href = encodeURI(this.href);
+          	}
+
+          	return Mark.up(templates.bookmark, {item: this, data: data});
+        },
+	};
 
     node.clickHandler = $.proxy(function () { unrollBookmark(this) }, node);
 
@@ -116,9 +116,9 @@ function addBookmarks(nodeType, nodeList, target, foldersOnly) {
       kids.reverse();
     }
 
-				if (foldersOnly) {
-						kids = kids.filter(function (item) {return item.url == undefined});
-				}
+    if (foldersOnly) {
+    	kids = kids.filter(function (item) {return item.url == undefined});
+    }
 
     for (var kid_index = 0; kid_index < kids.length; kid_index++) {
 						var kidData = kids[kid_index];
@@ -290,12 +290,22 @@ function editItem() {
 
 	var objectName = $(this).siblings('a').attr('extratitle');
 	var objectUrl = $(this).siblings('a').attr('href');
+	var objectHostname = $(this).siblings('a').prop('hostname');
 	var objectIcon = $(this).siblings('a').find('img').attr('src');
+	var objectIconSource = objectIcon;
+
+	if (objectIcon.indexOf("data:image") == 0) {
+		objectIconSource = "Downloaded from " + objectHostname;
+	}
+	if (objectIcon.indexOf("chrome") == 0) {
+		objectIconSource = "Browser's cached icon";
+	}
 
 	$('#edit-item-modal #bookmark-edit-name').val( objectName );
 	$('#edit-item-modal #bookmark-edit-url').val( objectUrl );
-	$('#edit-item-modal #bookmark-edit-icon').val( objectIcon );
-	
+	$('#edit-icon-image img').attr('src', objectIcon);
+	$('#edit-item-modal #bookmark-edit-icon').val( objectIconSource );
+
 	$('#edit-item-modal').modal('show');
 }
 
@@ -491,7 +501,26 @@ function registerEvents() {
 			}
 		);
 	});
-  $('#settings-form').on('submit', function () { toggleSettings(true); return false; });
+
+ 	$('#settings-form').on('submit', function () { toggleSettings(true); return false; });
+
+	$(document).on(
+		{
+			mouseenter: function (event) {
+				if (!editMode) {
+					return;
+				}
+				$(event.target).closest('.icon-wrapper').find('.icon-tool').addClass('edit-hover');
+			},
+			mouseleave: function (event) {
+				if (!editMode) {
+					return;
+				}
+				$(event.target).closest('.icon-wrapper').find('.icon-tool').removeClass('edit-hover');
+			}
+		},
+		'.icon-wrapper'
+	);
 }
 
 // please keep $(document).ready processing at the end of the file for convenience

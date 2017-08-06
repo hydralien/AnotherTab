@@ -91,8 +91,8 @@ body {
 }
 
 .trigger, .trigger img {
-		width: 32px;
-		height: 32px;
+	width: 32px;
+	height: 32px;
 }
 
 #chrome-tools {
@@ -161,28 +161,18 @@ body {
 		top: -50%;
 }*/
 
-.hide-item, .show-item, .pick-item, .drop-item, .edit-item {
-	background-color: #EEF1EB;
-	border: 1px solid white;
-	border-radius: 2px;
-	cursor: pointer;
-}
-
-.hide-item:hover, .show-item:hover, .pick-item:hover, .drop-item:hover, .edit-item:hover {
-	background-color: #dedede;
- 	border: 1px solid black;
-}
-
-.hide-item, .show-item, .pick-item, .drop-item, .edit-item {
+.icon-tool {
 	margin: -9px -15px -15px -15px;
 	float: right;
     width: 30px;
     height: 30px;
 	display: none;
-	opacity: 1;
+	background-color: #EEF1EB;
+	opacity: 0.5;
 	z-index: 10;
 	border: 1px solid white;
 	cursor: pointer;
+	border-radius: 3px; 
 }
 
 .drop-item {
@@ -219,6 +209,16 @@ body {
 
 .item-hidden .icon {
 		opacity: 0.4;
+}
+
+.icon-tool:hover {
+	background-color: #dedede;
+ 	border: 1px solid black;
+	opacity: 0.9;
+}
+
+.edit-hover {
+	opacity: 0.9;
 }
 
 .block-header {
@@ -268,9 +268,19 @@ body {
 
 #bookmark-edit-name, #bookmark-edit-url, #bookmark-edit-icon {
 	width: 95%;
-	border: 0;
+	border: 2px #fff solid;
+	border-radius: 3px;
+	padding: 5px;
 }
 
+
 #bookmark-edit-name:hover, #bookmark-edit-url:hover, #bookmark-edit-icon:hover {
-	border: 2px;
+	border: 2px #eee solid;
+}
+
+#edit-icon-image img {
+	width: 64px;
+	height: 64px;
+	border-radius: 3px;
+	border: 2px #eee solid;
 }
