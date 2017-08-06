@@ -284,3 +284,8 @@ body {
 	border-radius: 3px;
 	border: 2px #eee solid;
 }
+
+#bookmark-edit-save-container {
+ text-align: right;
+ margin-right: 20px;
+}

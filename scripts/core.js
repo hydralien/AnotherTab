@@ -286,7 +286,7 @@ function pickItem() {
 
 function editItem() {
 	console.log("Editing");
-	var item_id = $(this).attr('item_id');
+	var editItemId = $(this).attr('item_id');
 
 	var objectName = $(this).siblings('a').attr('extratitle');
 	var objectUrl = $(this).siblings('a').attr('href');
@@ -305,6 +305,7 @@ function editItem() {
 	$('#edit-item-modal #bookmark-edit-url').val( objectUrl );
 	$('#edit-icon-image img').attr('src', objectIcon);
 	$('#edit-item-modal #bookmark-edit-icon').val( objectIconSource );
+	$('#edit-item-modal #bookmark-edit-id').val( editItemId );
 
 	$('#edit-item-modal').modal('show');
 }
@@ -420,11 +421,34 @@ function registerEvents() {
   });
 
   $('#extensions').click( function () {chrome.tabs.create({url:'chrome://extensions/'})} );
+
   $('#cleanup').click( function () {chrome.tabs.create({url:'chrome://settings/clearBrowserData'})} );
+
   $('#params').click( function () {chrome.tabs.create({url:'chrome://settings'})} );
+
   $('#cookies').click( function () {chrome.tabs.create({url:'chrome://settings/cookies'})} );
+
   $('#passwords').click( function () {chrome.tabs.create({url:'chrome://settings/passwords'})} );
+
   $('#bookmarks').click( function () {chrome.tabs.create({url:'chrome://bookmarks'})} );
+
+	$('#edit-item-modal #bookmark-edit-save').click( function () {
+		var editItemId = $('#edit-item-modal #bookmark-edit-id').val();		
+
+		//$('#edit-icon-image img').attr('src', objectIcon);
+		//$('#edit-item-modal #bookmark-edit-icon').val( objectIconSource );
+		
+		chrome.bookmarks.update(
+			editItemId,
+			{
+				title : $('#edit-item-modal #bookmark-edit-name').val(),
+				url : $('#edit-item-modal #bookmark-edit-url').val()
+			},
+			function () {	$('#edit-item-modal').modal('hide'); }
+		);
+	});
+
+	
   $('#edit').click( function () {
 		editMode = editMode ? false : true;
 		if ($('.item-hidden').css('display') == 'none') {

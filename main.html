@@ -70,15 +70,19 @@
         			<h4 class="modal-title"><input type="edit" id="bookmark-edit-name" value="Edit item"/></h4>
       				</div>
       				<div class="modal-body">
-		    			<h4>
-		    				<input type="edit" id="bookmark-edit-url" value="Edit url"/>
-		    			</h4>
-		    			<h4>
-		    				<div id="edit-icon-image">
-  								<img src="" draggable="false">
-  							</div>
-		    				<input type="edit" id="bookmark-edit-icon" value="Edit icon"/>
-		    			</h4>
+		    				<h4>
+		    					<input type="edit" id="bookmark-edit-url" value="Edit url"/>
+		    				</h4>
+		    				<h4>
+		    					<div id="edit-icon-image">
+  									<img src="" draggable="false"/>
+										<input type="edit" id="bookmark-edit-icon" value="Edit icon"/>
+  								</div>
+		    				</h4>
+								<h4 id="bookmark-edit-save-container">
+									<input type="hidden" id="bookmark-edit-id"/>
+									<button type="button" id="bookmark-edit-save" class="btn btn-success" data-dismiss="modal" aria-label="Save">Save</button>
+								</h4>
       				</div>
      			</div>
   			</div>
