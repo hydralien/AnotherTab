@@ -444,7 +444,10 @@ function registerEvents() {
 				title : $('#edit-item-modal #bookmark-edit-name').val(),
 				url : $('#edit-item-modal #bookmark-edit-url').val()
 			},
-			function () {	$('#edit-item-modal').modal('hide'); }
+			function () {
+				$('#edit-item-modal').modal('hide');
+				window.location.reload();
+			}
 		);
 	});
 
