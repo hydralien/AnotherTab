@@ -1,3 +1,4 @@
+
 /* Bootstrap protection */
 
 * {
@@ -15,6 +16,7 @@ body {
 		padding: 0px;
 		margin: 0px;
 		box-sizing: initial;
+		overflow-y: scroll;
 }
 
 /* End Of Bootstrap protection */
