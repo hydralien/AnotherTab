@@ -6,10 +6,11 @@
 		
 		<link rel="stylesheet" href="styles/bootstrap.css"/>
 		<link rel="stylesheet" href="styles/styles_main.css"/>
-		<link rel="stylesheet" type="text/css" href="styles/tooltipster.css" />
+		<link rel="stylesheet" type="text/css" href="styles/tooltipster.min.css" />
+		<link rel="stylesheet" type="text/css" href="styles/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min.css" />
 
 		<script type="text/javascript" src="scripts/jquery.js"></script>
-		<script type="text/javascript" src="scripts/jquery.tooltipster.min.js"></script>
+		<script type="text/javascript" src="scripts/tooltipster.min.js"></script>
 		<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
 
 		<script type="text/javascript" src="scripts/markup.min.js"></script>
@@ -74,13 +75,29 @@
 		    					<input type="edit" id="bookmark-edit-url" value="Edit url"/>
 		    				</h4>
 		    				<h4>
-		    					<div id="edit-icon-image">
-  									<img src="" draggable="false"/>
-										<input type="edit" id="bookmark-edit-icon" value="Edit icon"/>
+		    					<div id="edit-icon-image-chrome" class="icon-image-choice">
+										<label>
+  										<input type="radio" name="edit-icon-image" value="icon-chrome">
+											<img src="" draggable="false" title="Browser icon"/>
+										</label>
   								</div>
+									<div id="edit-icon-image-web" class="icon-image-choice">
+										<label>
+  										<input type="radio" name="edit-icon-image" value="icon-web">
+											<img src="" draggable="false" title="Downloaded icon"/>
+										</label>
+  								</div>
+									<div id="edit-icon-image-custom" class="icon-image-choice">
+										<label>
+  										<input type="radio" name="edit-icon-image" value="icon-custom">
+											<img src="" draggable="false" title="Custom icon"/>
+										</label>
+  								</div>
+									<input type="edit" id="bookmark-edit-icon" value="Edit icon"/>
 		    				</h4>
 								<h4 id="bookmark-edit-save-container">
 									<input type="hidden" id="bookmark-edit-id"/>
+									<button type="button" id="bookmark-edit-cancel" class="btn btn-cancel" data-dismiss="modal" aria-label="Cancel">Cancel</button>
 									<button type="button" id="bookmark-edit-save" class="btn btn-success" data-dismiss="modal" aria-label="Save">Save</button>
 								</h4>
       				</div>

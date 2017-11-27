@@ -256,15 +256,15 @@ body {
 
 .anothertab-theme {
 	border-radius: 5px; 
-	border: 1px solid green;
-	background: #EDEEF2;
-	color: #222;
 }
 
 .anothertab-theme .tooltipster-content {
-	font-family: Arial, sans-serif;
+	font-family: sans-serif;
 	font-size: 14px;
 	line-height: 16px;
+	background: rgba(17, 17, 17, 0.9);
+	color: white;
+	border: 0px;
 	padding: 8px 10px;
 }
 
@@ -280,14 +280,19 @@ body {
 	border: 2px #eee solid;
 }
 
-#edit-icon-image img {
-	width: 64px;
-	height: 64px;
-	border-radius: 3px;
-	border: 2px #eee solid;
-}
-
 #bookmark-edit-save-container {
  text-align: right;
  margin-right: 20px;
+}
+
+.icon-image-choice {
+ display: none;
+ height: 64px;
+ width: 64px;
+ float: left;
+}
+
+.icon-image-choice  img {
+	width: 64px;
+	height: 64px;
 }

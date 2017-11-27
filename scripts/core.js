@@ -161,18 +161,9 @@ function addBookmarks(nodeType, nodeList, target, foldersOnly) {
 								target.find('#bookmark_' + kid.id).click(kid.clickHandler);
       }
 
-						var kidIcon = kidNode.find('.icon');
-						if ( kidIcon[0].scrollHeight > kidIcon[0].offsetHeight || kidIcon[0].scrollWidth > kidIcon[0].offsetWidth ) {
-								kidNode.find('.tooltipit').tooltipster({
-										animation: 'fade',
-										delay: 200,
-										theme: 'anothertab-theme',
-										touchDevices: false,
-										trigger: 'hover',
-										delay: 50,
-										position: 'bottom'
-								});
-						}
+			var kidIcon = kidNode.find('.icon');
+
+			kidNode.find('.tooltipit').tooltipster();
 
     }
   };
@@ -246,7 +237,7 @@ function syncConfig(callback) {
 function dropItem() {
 	var drop_id = $(this).attr('item_id');
   var drop_object = $(this);
-	var objectName = $(this).siblings('a').attr('extratitle');
+	var objectName = $(this).siblings('a').attr('itemname');
 
 	if ($(this).hasClass('type-bookmark')) {
 		if ($(this).hasClass('recursive')) {
@@ -288,22 +279,29 @@ function editItem() {
 	console.log("Editing");
 	var editItemId = $(this).attr('item_id');
 
-	var objectName = $(this).siblings('a').attr('extratitle');
+	var objectName = $(this).siblings('a').attr('itemname');
 	var objectUrl = $(this).siblings('a').attr('href');
 	var objectHostname = $(this).siblings('a').prop('hostname');
 	var objectIcon = $(this).siblings('a').find('img').attr('src');
 	var objectIconSource = objectIcon;
 
+	$('#edit-icon-image-web').hide();
+	$('#edit-icon-image-custom').hide();
+	
+	$('#edit-icon-image-chrome').show();
+	$('#edit-icon-image-chrome input').prop("checked", true);
+	$('#edit-icon-image-chrome img').attr('src', 'chrome://favicon/' + objectUrl);
+	objectIconSource = "Browser's cached icon";
+
 	if (objectIcon.indexOf("data:image") == 0) {
+		$('#edit-icon-image-web').show();
+		$('#edit-icon-image-web input').prop("checked", true);
+		$('#edit-icon-image-web img').attr('src', objectIcon);
 		objectIconSource = "Downloaded from " + objectHostname;
-	}
-	if (objectIcon.indexOf("chrome") == 0) {
-		objectIconSource = "Browser's cached icon";
 	}
 
 	$('#edit-item-modal #bookmark-edit-name').val( objectName );
 	$('#edit-item-modal #bookmark-edit-url').val( objectUrl );
-	$('#edit-icon-image img').attr('src', objectIcon);
 	$('#edit-item-modal #bookmark-edit-icon').val( objectIconSource );
 	$('#edit-item-modal #bookmark-edit-id').val( editItemId );
 
@@ -396,7 +394,7 @@ function applyLocale() {
   $.each(targets,
          function (target_key, target_id) {
 					 var message = chrome.i18n.getMessage(target_id);
-           $("#" + target_id).attr('title', message).attr('extratitle', message);
+           $("#" + target_id).attr('title', message).attr('itemname', message);
          });
 
   $.each(["bookmarks_header", "extensions_header", "root_bookmark_change_link"],
@@ -445,8 +443,14 @@ function registerEvents() {
 				url : $('#edit-item-modal #bookmark-edit-url').val()
 			},
 			function () {
+				var editItemTitle = $('#edit-item-modal #bookmark-edit-name').val();
+				$('#bookmark_' + editItemId).parent()
+					.attr('href', $('#edit-item-modal #bookmark-edit-url').val())
+					.attr('itemname', editItemTitle)
+					.attr('title', editItemTitle)
+					.tooltipster('instance').content(editItemTitle);
+				$('#bookmark_' + editItemId + ' span').text(editItemTitle);
 				$('#edit-item-modal').modal('hide');
-				window.location.reload();
 			}
 		);
 	});
@@ -580,6 +584,16 @@ $(document).ready(function () {
     registerEvents();
   });
 
-		$('.tooltipit').tooltipster();
+	$.tooltipster.setDefaults({
+		animation: 'fade',
+		delay: 200,
+		theme: 'tooltipster-borderless',
+		touchDevices: false,
+		trigger: 'hover',
+		delay: 50,
+		side: 'bottom'
+	});
+
+	$('.tooltipit').tooltipster();
 });
 // please keep $(document).ready processing at the end of the file for convenience
