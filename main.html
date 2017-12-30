@@ -72,40 +72,56 @@
         		<h4 class="modal-title"><input type="edit" id="bookmark-edit-name" value="Edit item"/></h4>
       		</div>
       		<div class="modal-body">
-						<div class="form-row">
-		    			<input type="edit" id="bookmark-edit-url" value="Edit url"/>
-						</div>
-						<div class="form-row align-items-center">
-							<div id="edit-icon-image-chrome" class="icon-image-choice col-auto">
-  							<label>
-									<input type="radio" name="edit-icon-image" value="icon-chrome">	Chrome cache
-								</label>
-							</div>
-							<div id="edit-icon-image-web" class="icon-image-choice col-auto">
-  							<label>
-									<input type="radio" name="edit-icon-image" id="edit-icon-image-web" value="icon-web"> From website
-								</label>
-							</div>
-							<div id="edit-icon-image-custom" class="icon-image-choice col-auto">
-  							<label>
-									<input type="radio" name="edit-icon-image" id="edit-icon-image-custom" value="icon-custom"> Custom
-								</label>
+						<div class="form-image row">
+							<div class="col-md-11">
+								<h3>Link:</h3>
+								<div class="form-row">
+		    					<input type="edit" id="bookmark-edit-url" value="Edit url"/>
+								</div>
 							</div>
 						</div>
-						<div class="form-row align-items-center">
-							<div class="col-auto">
-								<img src="" draggable="false" id="icon-image-chrome" title="Browser icon"/>
+						<div class="form-image row">
+							<div class="col-md-11">
+							<h3>Icon:</h3>
+							<div class="form-row align-items-center">
+								<div id="edit-icon-image-chrome" class="icon-image-choice col-sm-3">
+  								<label>
+										<input type="radio" name="edit-icon-image" value="chrome">	Chrome cache
+									</label>
+								</div>
+								<div id="edit-icon-image-web" class="icon-image-choice col-sm-3">
+  								<label>
+										<input type="radio" name="edit-icon-image" id="edit-icon-image-web" value="web"> From website
+									</label>
+								</div>
+								<div id="edit-icon-image-custom" class="icon-image-choice col-sm-3o">
+  								<label>
+										<input type="radio" name="edit-icon-image" id="edit-icon-image-custom" value="custom"> Custom
+									</label>
+								</div>
 							</div>
-							<div class="col-auto">
-								<img src="" draggable="false" id="icon-image-browser" title="Web icon"/>
+							<div class="form-row align-items-center">
+								<div class="col-sm-3">
+									<img src="" draggable="false" id="icon-image-chrome" class="edit-icon-image-icon" title="Browser icon"/>
+								</div>
+								<div class="col-sm-3">
+									<img src="" draggable="false" id="icon-image-web" class="edit-icon-image-icon" title="Web icon"/>
+								</div>
+								<div class="col-sm-3">
+									<img src="" draggable="false" id="icon-image-custom" class="edit-icon-image-icon" title="Custom icon"/>
+									<input type="file" id="image-file-select" name="image-file" />
+								</div>
 							</div>
-							<div class="col-auto">
-								<img src="" draggable="false" id="icon-image-custom" title="Custom icon"/>
 							</div>
 						</div>
+						<!--
+						<h3>Colour:</h3>
+						-->
 					</div>
 					<div class="modal-footer" id="bookmark-edit-save-container">
 						<input type="hidden" id="bookmark-edit-id"/>
+						<input type="hidden" id="bookmark-edit-icon"/>
+						<input type="hidden" id="bookmark-edit-type"/>
 						<button type="button" id="bookmark-edit-cancel" class="btn btn-cancel" data-dismiss="modal" aria-label="Cancel">Cancel</button>
 						<button type="button" id="bookmark-edit-save" class="btn btn-success" data-dismiss="modal" aria-label="Save">Save</button>
 					</div>

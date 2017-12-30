@@ -6,7 +6,7 @@ var templates = {
 {{if item.bookmark|notempty}}item-bookmark{{else}}item-extension{{/if}} \
 {{if item.hidden|notempty}}item-hidden{{/if}} \
 group-color-{{item.groupColor}}" \
-draggable="false" itemid="{{item.id}}" itemindex="{{item.index}}" parentid="{{if item.parent|notempty}}{{item.parent}}{{else}}0{{/if}}">\
+draggable="false" itemid="{{item.id}}" itemindex="{{item.index}}" parentid="{{if item.parent|notempty}}{{item.parent}}{{else}}0{{/if}}" itemtype="{{if item.folder|notempty}}folder{{/if}}">\
 <a class="tooltipit" href="{{item.href}}" {{item.click}} title="{{item.title}}" itemname="{{item.title}}" draggable="false">\
 	<div class="icon" id="bookmark_{{item.id}}" draggable="false">\
     <div class="icon-image" draggable="false">\

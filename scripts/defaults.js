@@ -37,5 +37,8 @@ var config = {
     "value" : '',
 		"type" : 'checkbox',
 		"editable" : true
-  }
+  },
+	"icon_exceptions" : {
+		"value" : {}
+	}
 };

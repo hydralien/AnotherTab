@@ -14,6 +14,23 @@ function removeNavbar() {
   });
 }
 
+function savedIconUrl(itemId, itemUrl) {
+	var itemHostname = itemUrl.prop('hostname');
+
+	var iconExceptions = config.icon_exceptions.value[itemId] || {}
+	savedIcon = localStorage.getItem(itemHostname);
+		
+	if (iconExceptions['source'] == 'custom') {
+		savedIcon = localStorage.getItem(itemId) || 'n/a';
+	}
+		
+	if (config.chrome_icon_cache.value == 'on' || savedIcon == 'n/a' || iconExceptions['source'] == 'chrome') {
+		savedIcon = 'chrome://favicon/' + itemUrl.attr('href');
+	}
+
+	return savedIcon;
+}
+
 var nodeBookmark = function (data) {
 	savedIcon = 'chrome://favicon/' + data.url;
 	
@@ -21,13 +38,10 @@ var nodeBookmark = function (data) {
 		var aLink = document.createElement("a");
 		aLink.href = data.url;
 
-		savedIcon = localStorage.getItem(aLink.hostname);
-		if (config.chrome_icon_cache.value == 'on' || savedIcon == 'n/a') {
-			savedIcon = 'chrome://favicon/' + data.url;
-		}
+		savedIcon = savedIconUrl(data.id, $(aLink));
 		
 		if (!savedIcon) {
-			savedIcon = 'chrome://favicon/' + data.url;1
+			savedIcon = 'chrome://favicon/' + data.url;
 			var iconUrl = aLink.hostname;
 			$.get(iconProxy + iconUrl).done(
 				function (encodedImage) {
@@ -167,7 +181,7 @@ function addBookmarks(nodeType, nodeList, target, foldersOnly) {
       }
 
 			var kidIcon = kidNode.find('.icon');
-			kidNode.find('.bookmark-text').textfill({'maxFontPixels': 16, 'minFontPixels': 6, 'changeLineHeight': 0.8});
+			kidNode.find('.bookmark-text').textfill({'maxFontPixels': 16, 'minFontPixels': 7, 'changeLineHeight': 1});
 
 			kidNode.find('.tooltipit').tooltipster();
     }
@@ -297,32 +311,50 @@ function pickItem() {
 }
 
 function editItem() {
-	console.log("Editing");
 	var editItemId = $(this).attr('item_id');
 
 	var objectName = $(this).siblings('a').attr('itemname');
 	var objectUrl = $(this).siblings('a').attr('href');
 	var objectHostname = $(this).siblings('a').prop('hostname');
 	var objectIcon = $(this).siblings('a').find('img').attr('src');
-	var objectIconSource = objectIcon;
-
-//	$('#edit-icon-image-web').hide();
-//	$('#edit-icon-image-custom').hide();
+	var objectIconSource = 'chrome';
+	var objectType = $(this).parent().attr('itemtype');
 	
-	$('#edit-icon-image-chrome').show();
-	$('#edit-icon-image-chrome input').prop("checked", true);
-	$('#icon-image-chrome').attr('src', 'chrome://favicon/' + objectUrl);
-	objectIconSource = "Browser's cached icon";
+	if (objectType == 'folder') {
+		$('#edit-item-modal .form-image').hide();
+	} else {
+		$('#edit-item-modal .form-image').show();
+		
+		$('#edit-icon-image-chrome').show();
+		$('#edit-icon-image-chrome input').prop("checked", true);
+		$('#icon-image-chrome').attr('src', 'chrome://favicon/' + objectUrl);
+		objectIconSource = "chrome";
 
-	if (objectIcon.indexOf("data:image") == 0) {
+		var	savedSiteIcon = localStorage.getItem(objectHostname);
+		$('#icon-image-web').attr('src', savedSiteIcon);
 		$('#edit-icon-image-web').show();
-		$('#edit-icon-image-web input').prop("checked", true);
-		$('#icon-image-web').attr('src', objectIcon);
-		objectIconSource = "Downloaded from " + objectHostname;
-	}
 
+		var	savedCustomIcon = localStorage.getItem(editItemId);
+		$('#icon-image-custom').attr('src', savedCustomIcon);
+		$('#edit-icon-image-custom').show();
+
+		var iconExceptions = config.icon_exceptions.value[editItemId] || {};
+		
+		if (iconExceptions['source'] == 'custom') {
+			$('#edit-icon-image-custom input').prop("checked", true);
+			objectIconSource = "custom";
+		}
+
+		if (iconExceptions['source'] == 'web') {
+			$('#edit-icon-image-web input').prop("checked", true);
+			objectIconSource = "web";
+		}
+		
+	}
+	
 	$('#edit-item-modal #bookmark-edit-name').val( objectName );
 	$('#edit-item-modal #bookmark-edit-url').val( objectUrl );
+	$('#edit-item-modal #bookmark-edit-type').val( objectType );
 	$('#edit-item-modal #bookmark-edit-icon').val( objectIconSource );
 	$('#edit-item-modal #bookmark-edit-id').val( editItemId );
 
@@ -424,6 +456,21 @@ function applyLocale() {
 				 });
 }
 
+function handleFileSelect(evt) {
+	var fileHandle = evt.target.files[0];
+	var reader = new FileReader();
+
+	reader.onload = (function(theFile) {
+		return function(e) {
+			var fileContent = e.target.result;
+			$('#edit-item-modal #icon-image-custom').attr('src', fileContent)
+			localStorage.setItem($('#edit-item-modal #bookmark-edit-id').val(), fileContent);
+		}
+	})(fileHandle);
+
+	reader.readAsDataURL(fileHandle);
+}
+
 function registerEvents() {
   $(document).mouseup(function (e) {
     var container = $("#settings");
@@ -454,26 +501,46 @@ function registerEvents() {
 	$('#edit-item-modal #bookmark-edit-save').click( function () {
 		var editItemId = $('#edit-item-modal #bookmark-edit-id').val();		
 
-		//$('#edit-icon-image img').attr('src', objectIcon);
-		//$('#edit-item-modal #bookmark-edit-icon').val( objectIconSource );
+		var iconDataUpdate = function () {
+			chrome.bookmarks.update(
+				editItemId,
+				{
+					title : $('#edit-item-modal #bookmark-edit-name').val(),
+					url : $('#edit-item-modal #bookmark-edit-url').val()
+				},
+				function () {
+					var editItemTitle = $('#edit-item-modal #bookmark-edit-name').val();
+
+					$('#bookmark_' + editItemId).parent()
+						.attr('href', $('#edit-item-modal #bookmark-edit-url').val())
+						.attr('itemname', editItemTitle)
+						.attr('title', editItemTitle)
+						.tooltipster('instance').content(editItemTitle);
+
+					$('#bookmark_' + editItemId + ' .bookmark-text').textfill({'maxFontPixels': 16, 'minFontPixels': 8, 'changeLineHeight': 1});
+					$('#bookmark_' + editItemId + ' span').text(editItemTitle);
+					
+					if ($('#bookmark-edit-type').val() != 'folder') {
+						var iconUrl = savedIconUrl(editItemId, $('#bookmark_' + editItemId).parent());
+						$('#bookmark_' + editItemId + ' img').attr('src', iconUrl);
+					}
+					
+					$('#edit-item-modal').modal('hide');
+				}
+			);
+		};
 		
-		chrome.bookmarks.update(
-			editItemId,
-			{
-				title : $('#edit-item-modal #bookmark-edit-name').val(),
-				url : $('#edit-item-modal #bookmark-edit-url').val()
-			},
-			function () {
-				var editItemTitle = $('#edit-item-modal #bookmark-edit-name').val();
-				$('#bookmark_' + editItemId).parent()
-					.attr('href', $('#edit-item-modal #bookmark-edit-url').val())
-					.attr('itemname', editItemTitle)
-					.attr('title', editItemTitle)
-					.tooltipster('instance').content(editItemTitle);
-				$('#bookmark_' + editItemId + ' span').text(editItemTitle);
-				$('#edit-item-modal').modal('hide');
+		if ($('input[name="edit-icon-image"]:checked').val() != $('#bookmark-edit-icon').val()) {
+			var iconExceptions = config.icon_exceptions.value || {};
+			if (!iconExceptions[editItemId]) {
+				iconExceptions[editItemId] = {}
 			}
-		);
+			iconExceptions[editItemId]['source'] = $('input[name="edit-icon-image"]:checked').val();
+			saveConfigParam('icon_exceptions', iconExceptions, iconDataUpdate);
+		} else {
+			iconDataUpdate();
+		}
+
 	});
 
 	
@@ -576,6 +643,8 @@ function registerEvents() {
 		},
 		'.icon-wrapper'
 	);
+
+	$('#image-file-select').on('change', handleFileSelect);
 }
 
 // please keep $(document).ready processing at the end of the file for convenience
