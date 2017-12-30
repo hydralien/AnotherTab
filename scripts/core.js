@@ -3,6 +3,8 @@ var editMode = false;
 var iconProxy = 'http://hydralien.net/iconproxy/base64/'
 var debugMode = false;
 var groupColors = 0;
+var fontColor = "#000000";
+var backgroundColor = "#DDDEE2";
 
 if (debugMode) {
 	iconProxy = 'http://localhost:8082/base64/';
@@ -33,7 +35,8 @@ function savedIconUrl(itemId, itemUrl) {
 
 var nodeBookmark = function (data) {
 	savedIcon = 'chrome://favicon/' + data.url;
-	
+
+	var iconExceptions = config.icon_exceptions.value[data.id] || {};
 	if (data.url) {	
 		var aLink = document.createElement("a");
 		aLink.href = data.url;
@@ -78,6 +81,8 @@ var nodeBookmark = function (data) {
 		click : '',
 		enabled: true,
 		groupColor: data.groupColor,
+		color: iconExceptions['fontColor'],
+		backgroundColor: iconExceptions['backgroundColor'],
 		htmlCode : function () {
 			if (this.folder) {
 				this.imgURL = 'icons/folder.png';
@@ -319,6 +324,7 @@ function editItem() {
 	var objectIcon = $(this).siblings('a').find('img').attr('src');
 	var objectIconSource = 'chrome';
 	var objectType = $(this).parent().attr('itemtype');
+	var iconExceptions = config.icon_exceptions.value[editItemId] || {};
 	
 	if (objectType == 'folder') {
 		$('#edit-item-modal .form-image').hide();
@@ -337,8 +343,6 @@ function editItem() {
 		var	savedCustomIcon = localStorage.getItem(editItemId);
 		$('#icon-image-custom').attr('src', savedCustomIcon);
 		$('#edit-icon-image-custom').show();
-
-		var iconExceptions = config.icon_exceptions.value[editItemId] || {};
 		
 		if (iconExceptions['source'] == 'custom') {
 			$('#edit-icon-image-custom input').prop("checked", true);
@@ -348,8 +352,14 @@ function editItem() {
 		if (iconExceptions['source'] == 'web') {
 			$('#edit-icon-image-web input').prop("checked", true);
 			objectIconSource = "web";
-		}
-		
+		}	
+	}
+
+	if (iconExceptions['fontColor']) {
+		$('#edit-item-modal #edit-icon-color-font').val( iconExceptions['fontColor'] );
+	}
+	if (iconExceptions['backgroundColor']) {
+		$('#edit-item-modal #edit-icon-color-background').val( iconExceptions['backgroundColor'] );
 	}
 	
 	$('#edit-item-modal #bookmark-edit-name').val( objectName );
@@ -510,32 +520,52 @@ function registerEvents() {
 				},
 				function () {
 					var editItemTitle = $('#edit-item-modal #bookmark-edit-name').val();
-
-					$('#bookmark_' + editItemId).parent()
+					var bookmarkItem = '#bookmark_' + editItemId;
+					
+					$(bookmarkItem).parent()
 						.attr('href', $('#edit-item-modal #bookmark-edit-url').val())
 						.attr('itemname', editItemTitle)
 						.attr('title', editItemTitle)
 						.tooltipster('instance').content(editItemTitle);
 
-					$('#bookmark_' + editItemId + ' .bookmark-text').textfill({'maxFontPixels': 16, 'minFontPixels': 8, 'changeLineHeight': 1});
-					$('#bookmark_' + editItemId + ' span').text(editItemTitle);
+					$( + ' .bookmark-text').textfill({'maxFontPixels': 16, 'minFontPixels': 8, 'changeLineHeight': 1});
+					$(bookmarkItem + ' span').text(editItemTitle);
 					
 					if ($('#bookmark-edit-type').val() != 'folder') {
-						var iconUrl = savedIconUrl(editItemId, $('#bookmark_' + editItemId).parent());
-						$('#bookmark_' + editItemId + ' img').attr('src', iconUrl);
+						var iconUrl = savedIconUrl(editItemId, $(bookmarkItem).parent());
+						$(bookmarkItem + ' img').attr('src', iconUrl);
 					}
+
+					$(bookmarkItem).css({
+						'color' : $('#edit-icon-color-font').val(),
+						'background-color' : $('#edit-icon-color-background').val()
+					});
 					
 					$('#edit-item-modal').modal('hide');
 				}
 			);
 		};
-		
+
+		var iconExceptions = config.icon_exceptions.value || {};
+		if (!iconExceptions[editItemId]) {
+			iconExceptions[editItemId] = {}
+		}
+
+		var configChanges = false;
 		if ($('input[name="edit-icon-image"]:checked').val() != $('#bookmark-edit-icon').val()) {
-			var iconExceptions = config.icon_exceptions.value || {};
-			if (!iconExceptions[editItemId]) {
-				iconExceptions[editItemId] = {}
-			}
 			iconExceptions[editItemId]['source'] = $('input[name="edit-icon-image"]:checked').val();
+			configChanges = true;
+		}
+		if ($('#edit-icon-color-font').val() != fontColor) {
+			iconExceptions[editItemId]['fontColor'] = $('#edit-icon-color-font').val();
+			configChanges = true;
+		}
+		if ($('#edit-icon-color-background').val() != backgroundColor) {
+			iconExceptions[editItemId]['backgroundColor'] = $('#edit-icon-color-background').val();
+			configChanges = true;
+		}
+		
+		if (configChanges) {
 			saveConfigParam('icon_exceptions', iconExceptions, iconDataUpdate);
 		} else {
 			iconDataUpdate();
