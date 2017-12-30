@@ -4,14 +4,17 @@ var templates = {
     '<div class="icon-wrapper \
 {{if item.parent|notempty}}child-of-{{item.parent}}{{/if}} \
 {{if item.bookmark|notempty}}item-bookmark{{else}}item-extension{{/if}} \
-{{if item.hidden|notempty}}item-hidden{{/if}}" \
-draggable="false" itemid="{{item.id}}" itemindex="{{item.index}}">\
+{{if item.hidden|notempty}}item-hidden{{/if}} \
+group-color-{{item.groupColor}}" \
+draggable="false" itemid="{{item.id}}" itemindex="{{item.index}}" parentid="{{if item.parent|notempty}}{{item.parent}}{{else}}0{{/if}}">\
 <a class="tooltipit" href="{{item.href}}" {{item.click}} title="{{item.title}}" itemname="{{item.title}}" draggable="false">\
 	<div class="icon" id="bookmark_{{item.id}}" draggable="false">\
-    	<div class="icon-image" draggable="false">\
-  			<img src="{{item.imgURL}}"/ draggable="false">\
+    <div class="icon-image" draggable="false">\
+  		<img src="{{item.imgURL}}"/ draggable="false">\
  		</div>\
- 		<span draggable="false">{{item.title}}</span>\
+    <div class="bookmark-text" draggable="false">\
+ 		  <span draggable="false">{{item.title}}</span>\
+    </div>\
 	</div>\
 </a>\
 <div class="icon-tool pick-item edit-hover" item_id="{{data.id}}" draggable="false"></div>\

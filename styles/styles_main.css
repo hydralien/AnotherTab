@@ -32,10 +32,14 @@ body {
 }
 
 .icon-wrapper {
-	margin: 10px;
+	border: 10px solid transparent;
 	float: left;
 	text-align: center;
  display: flex;
+}
+
+.icon-wrapper a {
+		background-color: inherit;
 }
 
 .icon {
@@ -285,14 +289,27 @@ body {
  margin-right: 20px;
 }
 
-.icon-image-choice {
- display: none;
- height: 64px;
- width: 64px;
- float: left;
+.group-color-0 {
+		border-color: transparent;
+		background-color: transparent;
 }
 
-.icon-image-choice  img {
-	width: 64px;
-	height: 64px;
+.group-color-1 {
+		border-color: #e1a1a1;
+		background-color: #e1a1a1;
+}
+
+.group-color-2 {
+		border-color: #a1e1a1;
+		background-color: #a1e1a1;
+}
+
+.group-color-3 {
+		border-color: #a1a1e1;
+		background-color: #a1a1e1;
+}
+
+.group-color-4 {
+		border-color: #a15050;
+		background-color: #a15050;
 }

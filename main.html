@@ -10,6 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="styles/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min.css" />
 
 		<script type="text/javascript" src="scripts/jquery.js"></script>
+		<script type="text/javascript" src="scripts/jquery.textfill.min.js"></script>
 		<script type="text/javascript" src="scripts/tooltipster.min.js"></script>
 		<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
 
@@ -64,46 +65,53 @@
 		</div>
 
 		<div class="modal fade" tabindex="-1" id="edit-item-modal">
-  			<div class="modal-dialog">
-    			<div class="modal-content">
-      				<div class="modal-header">
-        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        			<h4 class="modal-title"><input type="edit" id="bookmark-edit-name" value="Edit item"/></h4>
-      				</div>
-      				<div class="modal-body">
-		    				<h4>
-		    					<input type="edit" id="bookmark-edit-url" value="Edit url"/>
-		    				</h4>
-		    				<h4>
-		    					<div id="edit-icon-image-chrome" class="icon-image-choice">
-										<label>
-  										<input type="radio" name="edit-icon-image" value="icon-chrome">
-											<img src="" draggable="false" title="Browser icon"/>
-										</label>
-  								</div>
-									<div id="edit-icon-image-web" class="icon-image-choice">
-										<label>
-  										<input type="radio" name="edit-icon-image" value="icon-web">
-											<img src="" draggable="false" title="Downloaded icon"/>
-										</label>
-  								</div>
-									<div id="edit-icon-image-custom" class="icon-image-choice">
-										<label>
-  										<input type="radio" name="edit-icon-image" value="icon-custom">
-											<img src="" draggable="false" title="Custom icon"/>
-										</label>
-  								</div>
-									<input type="edit" id="bookmark-edit-icon" value="Edit icon"/>
-		    				</h4>
-								<h4 id="bookmark-edit-save-container">
-									<input type="hidden" id="bookmark-edit-id"/>
-									<button type="button" id="bookmark-edit-cancel" class="btn btn-cancel" data-dismiss="modal" aria-label="Cancel">Cancel</button>
-									<button type="button" id="bookmark-edit-save" class="btn btn-success" data-dismiss="modal" aria-label="Save">Save</button>
-								</h4>
-      				</div>
-     			</div>
-  			</div>
-		</div>
+  		<div class="modal-dialog">
+    		<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title"><input type="edit" id="bookmark-edit-name" value="Edit item"/></h4>
+      		</div>
+      		<div class="modal-body">
+						<div class="form-row">
+		    			<input type="edit" id="bookmark-edit-url" value="Edit url"/>
+						</div>
+						<div class="form-row align-items-center">
+							<div id="edit-icon-image-chrome" class="icon-image-choice col-auto">
+  							<label>
+									<input type="radio" name="edit-icon-image" value="icon-chrome">	Chrome cache
+								</label>
+							</div>
+							<div id="edit-icon-image-web" class="icon-image-choice col-auto">
+  							<label>
+									<input type="radio" name="edit-icon-image" id="edit-icon-image-web" value="icon-web"> From website
+								</label>
+							</div>
+							<div id="edit-icon-image-custom" class="icon-image-choice col-auto">
+  							<label>
+									<input type="radio" name="edit-icon-image" id="edit-icon-image-custom" value="icon-custom"> Custom
+								</label>
+							</div>
+						</div>
+						<div class="form-row align-items-center">
+							<div class="col-auto">
+								<img src="" draggable="false" id="icon-image-chrome" title="Browser icon"/>
+							</div>
+							<div class="col-auto">
+								<img src="" draggable="false" id="icon-image-browser" title="Web icon"/>
+							</div>
+							<div class="col-auto">
+								<img src="" draggable="false" id="icon-image-custom" title="Custom icon"/>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer" id="bookmark-edit-save-container">
+						<input type="hidden" id="bookmark-edit-id"/>
+						<button type="button" id="bookmark-edit-cancel" class="btn btn-cancel" data-dismiss="modal" aria-label="Cancel">Cancel</button>
+						<button type="button" id="bookmark-edit-save" class="btn btn-success" data-dismiss="modal" aria-label="Save">Save</button>
+					</div>
+      	</div>
+     	</div>
+  	</div>
 
 	</body>
 

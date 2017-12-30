@@ -2,6 +2,7 @@ var lastDragOver = null;
 var editMode = false;
 var iconProxy = 'http://hydralien.net/iconproxy/base64/'
 var debugMode = false;
+var groupColors = 0;
 
 if (debugMode) {
 	iconProxy = 'http://localhost:8082/base64/';
@@ -62,18 +63,19 @@ var nodeBookmark = function (data) {
 		parent : data.parentId,
 		click : '',
 		enabled: true,
+		groupColor: data.groupColor,
 		htmlCode : function () {
 			if (this.folder) {
 				this.imgURL = 'icons/folder.png';
 				this.href = '#';
-          		//javascript:unrollBookmark(' + kid['id'] + ')"';
-          	} else if (!this.href.match(/^http/)) {
-          		this.imgURL = 'chrome://favicon/';
-          		this.href = encodeURI(this.href);
-          	}
+        //javascript:unrollBookmark(' + kid['id'] + ')"';
+      } else if (!this.href.match(/^http/)) {
+        this.imgURL = 'chrome://favicon/';
+        this.href = encodeURI(this.href);
+      }
 
-          	return Mark.up(templates.bookmark, {item: this, data: data});
-        },
+      return Mark.up(templates.bookmark, {item: this, data: data});
+    },
 	};
 
     node.clickHandler = $.proxy(function () { unrollBookmark(this) }, node);
@@ -121,50 +123,53 @@ function addBookmarks(nodeType, nodeList, target, foldersOnly) {
     }
 
     for (var kid_index = 0; kid_index < kids.length; kid_index++) {
-						var kidData = kids[kid_index];
-						kidData.foldersOnly = foldersOnly;
+			var kidData = kids[kid_index];
+			kidData.foldersOnly = foldersOnly;
+			kidData.groupColor = groupColors && groupColors % 4 + 1;
 			
       kid = nodeType(kidData);
+
       if (kid.enabled === false) {
         continue;
       }
-						if (config.hidden_items.value[kid.id]) {
-								kid.hidden = true;
-						}
+
+			if (config.hidden_items.value[kid.id]) {
+				kid.hidden = true;
+			}
 
       var kidNode = $(kid.htmlCode());
 
-						if (editMode) {
-								if (foldersOnly) {
-										kidNode.find('.pick-item').toggle();
-								} else {
-										kidNode.find('.hide-item').toggle();
-										kidNode.find('.show-item').toggle();
-										kidNode.find('.drop-item').toggle();
-										kidNode.find('.edit-item').toggle();
-								}
-								kidNode.attr('draggable', 'true');
-						}
-
-						kidNode.find('.hide-item').click(toggleItem);
-						kidNode.find('.show-item').click(toggleItem);
-						kidNode.find('.drop-item').click(dropItem);
-						kidNode.find('.edit-item').click(editItem);
-						kidNode.find('.pick-item').click(pickItem);
+			if (editMode) {
+				if (foldersOnly) {
+					kidNode.find('.pick-item').toggle();
+				} else {
+					kidNode.find('.hide-item').toggle();
+					kidNode.find('.show-item').toggle();
+					kidNode.find('.drop-item').toggle();
+					kidNode.find('.edit-item').toggle();
+				}
+				kidNode.attr('draggable', 'true');
+			}
+			
+			kidNode.find('.hide-item').click(toggleItem);
+			kidNode.find('.show-item').click(toggleItem);
+			kidNode.find('.drop-item').click(dropItem);
+			kidNode.find('.edit-item').click(editItem);
+			kidNode.find('.pick-item').click(pickItem);
 
       if (target.hasClass('icon-wrapper')) {
         kidNode.addClass('folder');
         target.after(kidNode);
-								target.parent().find('#bookmark_' + kid.id).click(kid.clickHandler);
+				target.parent().find('#bookmark_' + kid.id).click(kid.clickHandler);
       } else {
         target.append(kidNode);
-								target.find('#bookmark_' + kid.id).click(kid.clickHandler);
+				target.find('#bookmark_' + kid.id).click(kid.clickHandler);
       }
 
 			var kidIcon = kidNode.find('.icon');
+			kidNode.find('.bookmark-text').textfill({'maxFontPixels': 16, 'minFontPixels': 6, 'changeLineHeight': 0.8});
 
 			kidNode.find('.tooltipit').tooltipster();
-
     }
   };
 
@@ -182,12 +187,28 @@ function addExtensions(root_id, target) {
 function unrollBookmark(parent) {
 	var container = parent.foldersOnly ? $('#root-list') : $('#content-bookmarks');
 	var parentNode = container.find('#bookmark_' + parent.id);
+	var parentIconWrapper = parentNode.parents('.icon-wrapper');
 			
   if (container.find('.child-of-' + parent.id).length > 0) {
     container.find('.child-of-' + parent.id).remove();
+
+		wrapperClasses = parentIconWrapper.attr('class').split(' ');
+		for (var wrapI = 0; wrapI < wrapperClasses.length; wrapI++) {
+			if (wrapperClasses[wrapI].search('group-color-') == -1) {
+				continue;
+			}
+			parentIconWrapper.removeClass( wrapperClasses[wrapI] );
+		}
+
+		parentIconWrapper.addClass('group-color-0');
+		groupColors -= 1;
     return;
   }
-    
+
+  groupColors += 1;
+	parentIconWrapper.removeClass('group-color-0');
+	parentIconWrapper.addClass('group-color-' + (groupColors % 4 + 1));
+	
   addBookmarks(
     nodeBookmark,
     function (action) {
@@ -285,18 +306,18 @@ function editItem() {
 	var objectIcon = $(this).siblings('a').find('img').attr('src');
 	var objectIconSource = objectIcon;
 
-	$('#edit-icon-image-web').hide();
-	$('#edit-icon-image-custom').hide();
+//	$('#edit-icon-image-web').hide();
+//	$('#edit-icon-image-custom').hide();
 	
 	$('#edit-icon-image-chrome').show();
 	$('#edit-icon-image-chrome input').prop("checked", true);
-	$('#edit-icon-image-chrome img').attr('src', 'chrome://favicon/' + objectUrl);
+	$('#icon-image-chrome').attr('src', 'chrome://favicon/' + objectUrl);
 	objectIconSource = "Browser's cached icon";
 
 	if (objectIcon.indexOf("data:image") == 0) {
 		$('#edit-icon-image-web').show();
 		$('#edit-icon-image-web input').prop("checked", true);
-		$('#edit-icon-image-web img').attr('src', objectIcon);
+		$('#icon-image-web').attr('src', objectIcon);
 		objectIconSource = "Downloaded from " + objectHostname;
 	}
 
@@ -526,7 +547,10 @@ function registerEvents() {
 			function () {
 				$(this).css('opacity', '1');
 				if (lastDragOver != null) {
-					chrome.bookmarks.move($(this).attr('itemid'), {index: parseInt($(lastDragOver).attr('itemIndex')) + 1});
+					chrome.bookmarks.move($(this).attr('itemid'), {
+						parentId: $(lastDragOver).attr('parentid'),
+						index: parseInt($(lastDragOver).attr('itemindex')) + 1
+					});
 					$(lastDragOver).after(this);
 				}
 			}
