@@ -204,6 +204,10 @@ function addExtensions(root_id, target) {
 }
 
 function unrollBookmark(parent) {
+	if (!parent.folder) {
+		return;
+	}
+	
 	var container = parent.foldersOnly ? $('#root-list') : $('#content-bookmarks');
 	var parentNode = container.find('#bookmark_' + parent.id);
 	var parentIconWrapper = parentNode.parents('.icon-wrapper');
