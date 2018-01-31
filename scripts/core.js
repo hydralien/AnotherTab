@@ -3,7 +3,7 @@ var editMode = false;
 var iconProxy = 'http://hydralien.net/iconproxy/base64/'
 var debugMode = false;
 var groupColors = 0;
-var fontColor = "#000000";
+var fontColor = "#0000ff";
 var backgroundColor = "#DDDEE2";
 
 if (debugMode) {
@@ -203,6 +203,21 @@ function addExtensions(root_id, target) {
   };
 }
 
+function getColorClass(element) {
+	wrapperClasses = element.attr('class').split(' ');
+
+	var colorClassName = '';
+	for (var wrapI = 0; wrapI < wrapperClasses.length; wrapI++) {
+		if (wrapperClasses[wrapI].search('group-color-') == -1) {
+			continue;
+		}
+		colorClassName = wrapperClasses[wrapI];
+		break;
+	}
+
+	return colorClassName;
+}
+
 function unrollBookmark(parent) {
 	if (!parent.folder) {
 		return;
@@ -215,13 +230,8 @@ function unrollBookmark(parent) {
   if (container.find('.child-of-' + parent.id).length > 0) {
     container.find('.child-of-' + parent.id).remove();
 
-		wrapperClasses = parentIconWrapper.attr('class').split(' ');
-		for (var wrapI = 0; wrapI < wrapperClasses.length; wrapI++) {
-			if (wrapperClasses[wrapI].search('group-color-') == -1) {
-				continue;
-			}
-			parentIconWrapper.removeClass( wrapperClasses[wrapI] );
-		}
+		var colorClass = getColorClass(parentIconWrapper);
+		parentIconWrapper.removeClass( colorClass );
 
 		parentIconWrapper.addClass('group-color-0');
 		groupColors -= 1;
@@ -632,7 +642,7 @@ function registerEvents() {
 			'dragleave',
 			'.icon-wrapper.item-bookmark',
 			function () {
-				$(this).css('margin-right', '10px');
+				$(this).css('margin-right', 0);
 			}
 		);
 		$(document).on(
@@ -646,13 +656,27 @@ function registerEvents() {
 			'dragend',
 			'.icon-wrapper.item-bookmark',
 			function () {
-				$(this).css('opacity', '1');
+				var actionItem = $(this);
+				actionItem.css('opacity', '1');
 				if (lastDragOver != null) {
-					chrome.bookmarks.move($(this).attr('itemid'), {
-						parentId: $(lastDragOver).attr('parentid'),
-						index: parseInt($(lastDragOver).attr('itemindex')) + 1
-					});
-					$(lastDragOver).after(this);
+					chrome.bookmarks.move(
+						actionItem.attr('itemid'),
+						{
+							parentId: $(lastDragOver).attr('parentid'),
+							index: parseInt($(lastDragOver).attr('itemindex')) + 1
+						},
+						function (result) {
+							$(lastDragOver).after(actionItem);
+
+							actionItem.attr('parentid', $(lastDragOver).attr('parentid'));
+							actionItem.attr('itemindex', parseInt($(lastDragOver).attr('itemindex')) + 1);
+							
+							var colorClass = getColorClass(actionItem);
+							actionItem.removeClass(colorClass);
+							var parentColorClass = getColorClass($(lastDragOver));
+							actionItem.addClass( parentColorClass );
+						}
+					);
 				}
 			}
 		);

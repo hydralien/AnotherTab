@@ -77,7 +77,7 @@ body {
 }
 
 .folder .icon {
-    background-color: #A0E47C;
+    background-color: #edff9b;
     border: 1px solid black;
 }
 
@@ -295,23 +295,23 @@ body {
 }
 
 .group-color-1 {
-		border-color: #cdc2ff;
-		background-color: #cdc2ff;
+		border-color: #ad9bff;
+		background-color: #ad9bff
 }
 
 .group-color-2 {
-		border-color: #bdb2ff;
-		background-color: #bdb2ff;
+		border-color: #df9bff;
+		background-color: #df9bff;
 }
 
 .group-color-3 {
-		border-color: #ada2ff;
-		background-color: #ada2ff;
+		border-color: #9bdcff;
+		background-color: #9bdcff;
 }
 
 .group-color-4 {
-		border-color: #9d92ff;
-		background-color: #9d92ff;
+		border-color: #ad9bff;
+		background-color: #ad9bff;
 }
 
 .edit-icon-image-icon {
