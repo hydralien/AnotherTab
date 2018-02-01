@@ -502,7 +502,7 @@ function registerEvents() {
     if (!container.is(e.target) // if the target of the click isn't the container...
         && container.has(e.target).length === 0) // ... nor a descendant of the container
     {
-      if ($('#settings-trigger img').is(e.target)) {// || $('#settings-trigger').has(e.target).length > 0
+      if ($('#settings-trigger').is(e.target) || $('#settings-trigger img').is(e.target)) {
         return toggleSettings();
       } else {
         return toggleSettings(true);

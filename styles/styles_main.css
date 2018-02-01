@@ -59,6 +59,10 @@ body {
     border: 1px solid transparent;
 }
 
+.icon-wrapper[draggable=true] .icon {
+		cursor: -webkit-grab;
+}
+
 .icon:hover {
 	background-color: #EDEEF2;
 	border: 1px solid green;
@@ -102,7 +106,7 @@ body {
 }
 
 #chrome-tools {
-		top: 0px;
+		bottom: 0px;
 		width: 32px;
 }
 
@@ -117,10 +121,10 @@ body {
 }
 
 #settings {
-		bottom: 0%;
+		top: 0%;
 		width: 350px;
 		max-height: 450px;
-		margin: 5px 15px 50px 15px;
+		margin: 50px 15px 15px 5px;
 		overflow-x: hidden;
 		overflow-y: scroll;
 		background-color: #ffffff;
@@ -159,7 +163,7 @@ body {
 }
 
 #settings-holder {
-		bottom: 0px;
+		top: 0px;
 }
 
 /*.icon div {
