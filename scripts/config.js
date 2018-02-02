@@ -35,7 +35,7 @@ function saveConfigParam(param_name, param_value, callback) {
 }
 
 function applyConfig() {
-  var settings_form = '<table><form id="settings-form">';
+  var settings_form = '<h3>Settings</h3><form id="settings-form">';
 
   var config_keys = Object.keys(config);
 
@@ -54,15 +54,15 @@ function applyConfig() {
 			configValue = config[config_key]['value'] == 'on' ? 'checked="checked"' : '';
 			configType = 'checkbox';
 		}
-    settings_form += '<tr><td class="name">' + chrome.i18n.getMessage(config_key) + '</td>' +
-      '<td class="setting"><input type="' + configType + '" id="setting_' + config_key + '" ' + configValue + '/><br/>' +
-      '<span>' + chrome.i18n.getMessage(config_key + '_hint') + '</span></td></tr>';
+    settings_form += '<p>' + chrome.i18n.getMessage(config_key) + '</p>' +
+      '<input type="' + configType + '" id="setting_' + config_key + '" ' + configValue + '/><br/>' +
+      '<span>' + chrome.i18n.getMessage(config_key + '_hint') + '</span>';
   };
 
-  settings_form += '</form></table>';
+  settings_form += '</form>';
 
-  $('#settings').html(settings_form);
-  $('#settings input').keyup(function (event) {
+  $('#menu').html(settings_form);
+  $('#menu input').keyup(function (event) {
     if (event.keyCode == 13) {
       toggleSettings(true);
     }

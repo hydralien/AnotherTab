@@ -13,13 +13,66 @@
   box-sizing: initial; }
 
 body {
-		padding: 0px;
-		margin: 0px;
+		padding: 0;
+		margin: 0;
 		box-sizing: initial;
-		overflow-y: scroll;
+		overflow-y: hidden;
+		height: 100%;
 }
 
-/* End Of Bootstrap protection */
+html {
+		height: 100%;
+		margin: 0;
+}
+
+/* End Of Bootstrap protection and other black magic */
+
+#full-content {
+		height:100%;
+		display:flex;
+		flex-direction: row;
+		align-content: stretch;
+}
+
+#tools-container {
+		width: 64px;
+		position: relative;
+		background-color: #DDDEE2;
+}
+
+#tools {
+		position:absolute;
+		width:100%;
+		height:100%;
+		overflow-y:auto;
+}
+
+#menu-container {
+		width: 230px;
+		margin-left: -250px;
+		background-color: #4285f4;
+		color: white;
+		padding: 10px;
+}
+
+#menu {
+		position:absolute;
+		width:100%;
+		height:100%;
+		overflow-y:auto;
+}
+
+#bookmarks-container {
+		flex:1;
+		position:relative;
+}
+
+#bookmarks {
+		position:absolute;
+		width:100%;
+		height:100%;
+		overflow-y:auto;
+}
 
 .content {
 		max-height: 100%;
@@ -89,9 +142,6 @@ body {
     background-color: #C0E49C;
 }
 
-.tools {
-		position: fixed;
-}
 
 .trigger {
 		cursor: pointer;
@@ -106,7 +156,6 @@ body {
 }
 
 #chrome-tools {
-		bottom: 0px;
 		width: 32px;
 }
 
@@ -115,37 +164,7 @@ body {
 }
 
 .trigger:hover, .trigger.active {
-	background-color: #dedede;
-  border: 1px solid green;
-	border-radius: 3px;
-}
-
-#settings {
-		top: 0%;
-		width: 350px;
-		max-height: 450px;
-		margin: 50px 15px 15px 5px;
-		overflow-x: hidden;
-		overflow-y: scroll;
-		background-color: #ffffff;
-		border: 1px solid;
-		border-radius: 5px;
-		display: none;
-		z-index: 20;
-}
-
-#settings table {
-		margin: 10px;
-}
-
-#settings .name {
-		width: 100px;
-		font-weight: bold;
-		font-size: 10pt;
-		padding-top: 15px;
-		font-family: Verdana;
-		text-align: left;
-		vertical-align: top;
+	background-color: #bebebe;
 }
 
 #settings .setting {
@@ -163,13 +182,17 @@ body {
 }
 
 #settings-holder {
-		top: 0px;
+		width: 32px;
 }
 
 /*.icon div {
 		position: relative;
 		top: -50%;
 }*/
+
+input {
+		color: black;
+}
 
 .icon-tool {
 	margin: -9px -15px -15px -15px;
@@ -321,3 +344,4 @@ body {
 .edit-icon-image-icon {
 		width: 32px;
 }
+

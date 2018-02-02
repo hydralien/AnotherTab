@@ -509,7 +509,14 @@ function registerEvents() {
       }
     }
   });
-
+  $('#settings-trigger').click( function () {
+		if ($('#menu-container').css('margin-left') == '0px')  {
+			$('#menu-container').css({'margin-left': '-250px', 'transition': 'margin 0.5s'});
+		} else {
+			$('#menu-container').css({'margin-left': 0, 'transition': 'margin 0.5s'});
+		}
+	} );
+	
   $('#extensions').click( function () {chrome.tabs.create({url:'chrome://extensions/'})} );
 
   $('#cleanup').click( function () {chrome.tabs.create({url:'chrome://settings/clearBrowserData'})} );

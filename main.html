@@ -22,45 +22,60 @@
 	</head>
 
 	<body>
+		<div id="full-content">
+			<div id="menu-container">
+				<div id="menu">
 
-		<div class="block-header">
-			<span id="bookmarks_header"></span> (<span id="root_bookmark_name"></span>)
+				</div>
+			</div>
+
+			<div id="tools-container">
+				<div id="tools">
+					<div id="settings-holder" class="tools">
+						<div id="settings-trigger" class="trigger">
+							<img src="icons/settings.png"/>
+						</div>
+						<div class="trigger" id="edit">
+							<img src="icons/edit.png"/>
+						</div>
+					</div>
+
+					<div id="chrome-tools" class="tools">
+						<div class="trigger" id="extensions">
+							<img src="icons/extensions.png"/>
+						</div>
+						<div class="trigger" id="cleanup">
+							<img src="icons/cleanup.png"/>
+						</div>
+						<div class="trigger" id="params">
+							<img src="icons/tasks.png"/>
+						</div>
+						<div class="trigger" id="passwords">
+							<img src="icons/password.png"/>
+						</div>
+						<div class="trigger" id="bookmarks">
+							<img src="icons/bookmarks.png"/>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div id="bookmarks-container">
+				<div id="bookmarks">
+					<div class="block-header">
+						<span id="bookmarks_header"></span> (<span id="root_bookmark_name"></span>)
+					</div>
+					<div id="root-list" class="root-bookmarks content"></div>
+					<div class="content" id="content-bookmarks">		</div>
+					
+					<div class="block-header"><span id="extensions_header"></span></div>
+					<div class="content" id="content-extensions">
+					</div>
+				</div>
+			</div>
 		</div>
-		<div id="root-list" class="root-bookmarks content"></div>
-		<div class="content" id="content-bookmarks">		</div>
-
-		<div class="block-header"><span id="extensions_header"></span></div>
-		<div class="content" id="content-extensions">
-		</div>
-
-		<div id="settings-holder" class="tools">
-			<div id="settings-trigger" class="trigger">
-				<img src="icons/settings.png"/>
-			</div>
-			<div class="trigger" id="edit">
-				<img src="icons/edit.png"/>
-			</div>
-		</div>
-		<div id="settings" class="tools"></div>
-
-		<div id="chrome-tools" class="tools">
-			<div class="trigger" id="extensions">
-				<img src="icons/extensions.png"/>
-			</div>
-			<div class="trigger" id="cleanup">
-				<img src="icons/cleanup.png"/>
-			</div>
-			<div class="trigger" id="params">
-				<img src="icons/tasks.png"/>
-			</div>
-			<div class="trigger" id="passwords">
-				<img src="icons/password.png"/>
-			</div>
-			<div class="trigger" id="bookmarks">
-				<img src="icons/bookmarks.png"/>
-			</div>
-		</div>
-
+		
 		<div class="modal fade" tabindex="-1" id="edit-item-modal">
   		<div class="modal-dialog">
     		<div class="modal-content">
