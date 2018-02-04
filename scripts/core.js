@@ -1,4 +1,5 @@
 var lastDragOver = null;
+var ghostBookmark = $(Mark.up(templates.ghost_bookmark));
 var editMode = false;
 var iconProxy = 'http://hydralien.net/iconproxy/base64/'
 var debugMode = false;
@@ -431,22 +432,13 @@ function toggleItem() {
 	}
 }
 
-function toggleSettings(off) {
-  if (off && $('#settings').is(":hidden")) {
-    return true;
-  }
-
-  if (off) {
-    $('#settings').hide();
-  } else {
-    $('#settings').toggle();
-  }
-
-	$('#settings-trigger').addClass('active');
-  if ($('#settings').is(":hidden")) {
+function toggleSettings() {
+	if ($('#menu-container').css('margin-left') == '0px')  {
+		// closing settings, saving changes along the way
+		$('#menu-container').css({'margin-left': '-250px', 'transition': 'margin 0.5s'});
 		$('#settings-trigger').removeClass('active');
 
-    $.each(config, function (config_key, config_data) {
+		$.each(config, function (config_key, config_data) {
 			var setting = $('#setting_' + config_key);
 			if (setting.length == 0) {
 				return;
@@ -460,13 +452,15 @@ function toggleSettings(off) {
         applyConfigParam(config_key);
       }
     });
-  }
-
-	return true;
+	} else {
+		// displaying settings
+		$('#settings-trigger').addClass('active');
+		$('#menu-container').css({'margin-left': 0, 'transition': 'margin 0.5s'});
+	}
 }
 
 function applyLocale() {
-  var targets = ["settings", "extensions", "tasks", "cleanup", "params", "cookies", "passwords", "edit", "bookmarks", "settings_trigger"];
+  var targets = ["settings", "extensions", "tasks", "cleanup", "params", "cookies", "passwords", "edit", "all-bookmarks", "settings_trigger"];
 
   $.each(targets,
          function (target_key, target_id) {
@@ -496,26 +490,7 @@ function handleFileSelect(evt) {
 }
 
 function registerEvents() {
-  $(document).mouseup(function (e) {
-    var container = $("#settings");
-
-    if (!container.is(e.target) // if the target of the click isn't the container...
-        && container.has(e.target).length === 0) // ... nor a descendant of the container
-    {
-      if ($('#settings-trigger').is(e.target) || $('#settings-trigger img').is(e.target)) {
-        return toggleSettings();
-      } else {
-        return toggleSettings(true);
-      }
-    }
-  });
-  $('#settings-trigger').click( function () {
-		if ($('#menu-container').css('margin-left') == '0px')  {
-			$('#menu-container').css({'margin-left': '-250px', 'transition': 'margin 0.5s'});
-		} else {
-			$('#menu-container').css({'margin-left': 0, 'transition': 'margin 0.5s'});
-		}
-	} );
+  $('#settings-trigger').click( toggleSettings );
 	
   $('#extensions').click( function () {chrome.tabs.create({url:'chrome://extensions/'})} );
 
@@ -527,7 +502,7 @@ function registerEvents() {
 
   $('#passwords').click( function () {chrome.tabs.create({url:'chrome://settings/passwords'})} );
 
-  $('#bookmarks').click( function () {chrome.tabs.create({url:'chrome://bookmarks'})} );
+  $('#all-bookmarks').click( function () {chrome.tabs.create({url:'chrome://bookmarks'})} );
 
 	$('#edit-item-modal #bookmark-edit-save').click( function () {
 		var editItemId = $('#edit-item-modal #bookmark-edit-id').val();		
@@ -609,6 +584,7 @@ function registerEvents() {
 		$('.icon-wrapper.item-bookmark').attr('draggable', $('.icon-wrapper').attr('draggable') == 'true' ? 'false' : 'true' );
 
 		if (editMode) {
+			$('#bookmarks').css({'animation': 'edit-highlight 0.3s'});
 			$(this).addClass('active');
 			$('#root_bookmark_name').addClass('edit').click(
 				function () {
@@ -633,25 +609,32 @@ function registerEvents() {
 				}
 			);
 		} else {
+			$('#bookmarks').css({'animation': 'none'});
 			$(this).removeClass('active');
 			$('#root-list').css('display', 'none');
 			$('#root_bookmark_name').removeClass('edit').unbind('click');
 		}
+
 		$(document).on(
 			'dragover',
 			'.icon-wrapper.item-bookmark',
 			function () {
-				$(this).css('margin-right', '30px');
+				$(this).after(ghostBookmark);
+				ghostBookmark.show();
+				//$(this).css('margin-right', '30px');
 				lastDragOver = this;
 			}
 		);
+
 		$(document).on(
 			'dragleave',
 			'.icon-wrapper.item-bookmark',
 			function () {
-				$(this).css('margin-right', 0);
+				ghostBookmark.hide();
+				//$(this).css('margin-right', 0);
 			}
 		);
+
 		$(document).on(
 			'dragstart',
 			'.icon-wrapper.item-bookmark',
@@ -659,6 +642,7 @@ function registerEvents() {
 				$(this).css('opacity', '0.4');
 			}
 		);
+
 		$(document).on(
 			'dragend',
 			'.icon-wrapper.item-bookmark',
@@ -709,6 +693,17 @@ function registerEvents() {
 		'.icon-wrapper'
 	);
 
+	$(document).on(
+		'click',
+		'.icon-wrapper a',
+		function (evt) {
+			if (!editMode) {
+				return;
+			}
+			evt.preventDefault();
+		}
+	);
+	
 	$('#image-file-select').on('change', handleFileSelect);
 }
 

@@ -56,10 +56,10 @@ html {
 }
 
 #menu {
-		position:absolute;
-		width:100%;
-		height:100%;
-		overflow-y:auto;
+		position: absolute;
+		width: 230px;
+		height: 100%;
+		overflow-y: auto;
 }
 
 #bookmarks-container {
@@ -345,3 +345,17 @@ input {
 		width: 32px;
 }
 
+@keyframes edit-highlight {
+		0% {
+				background-color: default;
+		}
+		50% {
+				background-color: #edff9b;
+		}
+		100% {
+				background-color: default;
+		}
+}
+
+@keyframes none {
+}

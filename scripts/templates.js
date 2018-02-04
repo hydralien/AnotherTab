@@ -38,6 +38,9 @@ itemtype="{{if item.folder|notempty}}folder{{/if}}"\
  </div>\
 </a>\
 {{/items}}\
-</div>'
+</div>',
+
+	ghost_bookmark:
+	'<div class="icon-wrapper"><div class="icon ghost"></div></div>',
 	
 }
