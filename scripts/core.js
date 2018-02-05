@@ -460,7 +460,7 @@ function toggleSettings() {
 }
 
 function applyLocale() {
-  var targets = ["settings", "extensions", "tasks", "cleanup", "params", "cookies", "passwords", "edit", "all-bookmarks", "settings_trigger"];
+  var targets = ["settings", "extensions", "tasks", "cleanup", "params", "cookies", "passwords", "edit", "all_bookmarks", "settings_trigger"];
 
   $.each(targets,
          function (target_key, target_id) {
@@ -502,7 +502,7 @@ function registerEvents() {
 
   $('#passwords').click( function () {chrome.tabs.create({url:'chrome://settings/passwords'})} );
 
-  $('#all-bookmarks').click( function () {chrome.tabs.create({url:'chrome://bookmarks'})} );
+  $('#all_bookmarks').click( function () {chrome.tabs.create({url:'chrome://bookmarks'})} );
 
 	$('#edit-item-modal #bookmark-edit-save').click( function () {
 		var editItemId = $('#edit-item-modal #bookmark-edit-id').val();		

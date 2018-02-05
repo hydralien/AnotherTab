@@ -40,7 +40,7 @@
     "message" : "Edit and arrange bookmarks list",
     "description" : "Title of Bookmarks List Edit shortcut"
   },
-  "all-bookmarks" : {
+  "all_bookmarks" : {
     "message" : "Launch browser Bookmarks Management tool",
     "description" : "Title of Bookmarks shortcut"
   },
