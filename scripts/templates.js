@@ -9,7 +9,7 @@ group-color-{{item.groupColor}}" \
 draggable="false" itemid="{{item.id}}" \
 itemindex="{{item.index}}" \
 parentid="{{if item.parent|notempty}}{{item.parent}}{{else}}0{{/if}}" \
-itemtype="{{if item.folder|notempty}}folder{{/if}}"\
+itemtype="{{if item.folder|notempty}}folder{{else}}icon{{/if}}"\
 >\
 <a class="tooltipit" href="{{item.href}}" {{item.click}} title="{{item.title}}" itemname="{{item.title}}" draggable="false">\
 	<div class="icon" id="bookmark_{{item.id}}" draggable="false" style="{{if item.color|notempty}}color:{{item.color}};{{/if}}{{if item.backgroundColor|notempty}}background-color:{{item.backgroundColor}};{{/if}}">\

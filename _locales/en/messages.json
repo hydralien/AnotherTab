@@ -29,12 +29,16 @@
     "description" : "Title of Browser Settings shortcut"
   },
   "cookies" : {
-    "message" : "Manage browser cookies",
+    "message" : "Manage browser cookies and site data",
     "description" : "Title of Cookie Management shortcut"
   },
   "passwords" : {
     "message" : "Manage saved passwords",
     "description" : "Title of Passwords Management shortcut"
+  },
+  "chrome_reload" : {
+    "message" : "Restart Chrome",
+    "description" : "Title of Chrome restart shortcut"
   },
   "edit" : {
     "message" : "Edit and arrange bookmarks list",

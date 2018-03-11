@@ -48,15 +48,30 @@ function applyConfig() {
       continue;
     }
 
+    settings_form += '<p>' + chrome.i18n.getMessage(config_key) + '</p>';
 		var configValue = 'value="' + config[config_key]['value'] + '"';
 		var configType = 'text';
-		if (config[config_key]['type'] && config[config_key]['type'] == 'checkbox') {
-			configValue = config[config_key]['value'] == 'on' ? 'checked="checked"' : '';
-			configType = 'checkbox';
+		if (config[config_key]['type']) {
+			switch (config[config_key]['type']) {
+			case 'checkbox':
+				configValue = config[config_key]['value'] == 'on' ? 'checked="checked"' : '';
+				configType = 'checkbox';
+				settings_form += '<input type="' + configType + '" id="setting_' + config_key + '" ' + configValue + '/><br/>';
+				break;
+			case 'select':
+				settings_form += Mark.up('<select id="setting_{{configKey}}">', {'configKey' : config_key});
+				for (var selectIndex=0; selectIndex < config[config_key]['values'].length; selectIndex++) {
+					settings_form += '<option>';
+				}
+				configValue = config[config_key]['value'] == 'on' ? 'checked="checked"' : '';
+				configType = 'checkbox';
+				settings_form += '<input type="' + configType + '" id="setting_' + config_key + '" ' + configValue + '/><br/>';
+				break;
+
+			}
 		}
-    settings_form += '<p>' + chrome.i18n.getMessage(config_key) + '</p>' +
-      '<input type="' + configType + '" id="setting_' + config_key + '" ' + configValue + '/><br/>' +
-      '<span>' + chrome.i18n.getMessage(config_key + '_hint') + '</span>';
+
+		settings_form += '<span>' + chrome.i18n.getMessage(config_key + '_hint') + '</span>';
   };
 
   settings_form += '</form>';

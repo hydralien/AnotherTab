@@ -7,6 +7,8 @@ var groupColors = 0;
 var fontColor = "#0000ff";
 var backgroundColor = "#DDDEE2";
 
+var tmp={ 'cell_height':{'value':50}};
+
 if (debugMode) {
 	iconProxy = 'http://localhost:8082/base64/';
 }
@@ -283,7 +285,7 @@ function syncConfig(callback) {
 			}
     }
 
-    applyConfig();
+    //applyConfig();
 
 		callback();
   });
@@ -460,7 +462,7 @@ function toggleSettings() {
 }
 
 function applyLocale() {
-  var targets = ["settings", "extensions", "tasks", "cleanup", "params", "cookies", "passwords", "edit", "all_bookmarks", "settings_trigger"];
+  var targets = ["settings", "extensions", "tasks", "cleanup", "params", "cookies", "passwords", "edit", "all_bookmarks", "settings_trigger", "chrome_reload"];
 
   $.each(targets,
          function (target_key, target_id) {
@@ -504,6 +506,14 @@ function registerEvents() {
 
   $('#all_bookmarks').click( function () {chrome.tabs.create({url:'chrome://bookmarks'})} );
 
+	$('#cookies').click( function () {chrome.tabs.create({url:'chrome://settings/siteData'})} );
+
+	$('#chrome_reload').click(
+		function () {
+			$('#confirm-modal').modal('show');
+		}
+	);
+	
 	$('#edit-item-modal #bookmark-edit-save').click( function () {
 		var editItemId = $('#edit-item-modal #bookmark-edit-id').val();		
 
@@ -706,7 +716,7 @@ function registerEvents() {
 	
 	$('#image-file-select').on('change', handleFileSelect);
 }
-
+var menuApp;
 // please keep $(document).ready processing at the end of the file for convenience
 $(document).ready(function () {
   syncConfig(function () {
@@ -748,5 +758,13 @@ $(document).ready(function () {
 	});
 
 	$('.tooltipit').tooltipster();
+
+	menuApp = new Vue({
+		el: '#menu',
+		data: config
+	});
+	
+	toggleSettings();
 });
 // please keep $(document).ready processing at the end of the file for convenience
+

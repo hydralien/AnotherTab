@@ -19,10 +19,14 @@ var config = {
   },
   "cell_max_width" : {
     "value" : "60px",
+		"type" : "range",
+		"extra-value" : "none",
     "css-target" : ".icon",
     "css-key" : ["max-width"]
   },
   "tools_position" : {
+		"type" : "select",
+		"values" : [ "left", "right" ],
     "value" : "left",
     "css-target" : ".tools",
     "css-key" : ["left", "right"]
@@ -40,5 +44,30 @@ var config = {
   },
 	"icon_exceptions" : {
 		"value" : {}
-	}
+	},
+	"folder_color" : {
+		"value" : "#ff3333",
+		"type" : "color",
+		"css-target" : ".folder .icon",
+    "css-key" : ["background-color"]
+  },
+	"icon_color" : {
+		"value" : "#dddddd",
+		"type" : "color",
+		"css-target" : ".icon",
+    "css-key" : ["background-color"]
+  },
+	"page_background_color" : {
+		"value" : "#ffffff",
+		"type" : "color",
+		"css-target" : ".body",
+    "css-key" : ["background-color"]
+  },
+	"page_background_image" : {
+		"value" : "",
+		"type" : "file",
+		"image" : 'accept="image/*"',
+		"css-target" : "body",
+    "css-key" : ["background-image"]
+  },
 };

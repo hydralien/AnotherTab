@@ -13,7 +13,9 @@
 		<script type="text/javascript" src="scripts/jquery.textfill.min.js"></script>
 		<script type="text/javascript" src="scripts/tooltipster.min.js"></script>
 		<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
-
+		<!-- <script type="text/javascript" src="scripts/vue.min.js"></script> -->
+		<script type="text/javascript" src="scripts/vue_dev.js"></script>
+		
 		<script type="text/javascript" src="scripts/markup.min.js"></script>
 		<script type="text/javascript" src="scripts/defaults.js"></script>
 		<script type="text/javascript" src="scripts/templates.js"></script>
@@ -25,7 +27,30 @@
 		<div id="full-content">
 			<div id="menu-container">
 				<div id="menu">
-
+					<h3>Settings</h3>
+					<form id="settings-form">
+						<p>Icon size:</p>
+						<input type="text" id="setting_icon_size" value="32px"><br><span>Chrome default favicon size is 16px</span>
+						<p>Cell height:</p>
+						<input type="text" id="cell_height" v-model="cell_height.value">
+						<input type="range" min="10" max="250" step="1" id="cell_height_range" v-model="cell_height.value"><br><span>Use pixels (like '60px') or 'none' for auto</span>
+						<p>Cell width:</p>
+						<input type="text" id="setting_cell_width" value="60px"><br><span>Use pixels (like '60px') or 'none' for auto</span>
+						<p>Cell max width:</p>
+						<input type="text" id="setting_cell_max_width" value="60px"><br><span>Use pixels (like '60px') or 'none' for auto</span>
+						<p>Toolbox position:</p>
+						<input type="text" id="setting_tools_position" value="left"><br><span>Position of toolbox, use 'left' or 'right'</span>
+						<p>Chrome icons only</p>
+						<input type="checkbox" id="setting_chrome_icon_cache" checked="chrome_icon_cache.value ? 'checked' : ''"><br><span>Always use icons from Google Chrome cache (small but reliable)</span>
+						<p></p>
+						<input type="color" id="setting_folder_color" value="folder_color.value"><br><span></span>
+						<p></p>
+						<input type="text" id="setting_icon_color" value="#dddddd"><br><span></span>
+						<p></p>
+						<input type="text" id="setting_page_background_color" value="#ffffff"><br><span></span>
+						<p></p>
+						<input type="text" id="setting_page_background_image" value=""><br><span></span>
+					</form>
 				</div>
 			</div>
 
@@ -47,6 +72,9 @@
 						<div class="trigger" id="cleanup">
 							<img src="icons/cleanup.png"/>
 						</div>
+						<div class="trigger" id="cookies">
+							<img src="icons/cookie.png"/>
+            </div>
 						<div class="trigger" id="params">
 							<img src="icons/tasks.png"/>
 						</div>
@@ -56,6 +84,11 @@
 						<div class="trigger" id="all_bookmarks">
 							<img src="icons/bookmarks.png"/>
 						</div>
+						<a href="chrome://restart/">
+							<div class="trigger" id="chrome_reload">
+								<img src="icons/reload.png"/>
+							</div>
+						</a>
 					</div>
 
 				</div>
@@ -71,6 +104,29 @@
 					
 					<div class="block-header"><span id="extensions_header"></span></div>
 					<div class="content" id="content-extensions">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" tabindex="-1" id="confirm-modal">
+  		<div class="modal-dialog">
+    		<div class="modal-content">
+      		<div class="modal-header">
+						<h4>Chrome restart</h4>
+      		</div>
+      		<div class="modal-body">
+						<h4>Instructions</h4>
+						Unfortunately, apps cannot restart browser - users have to do it themselves. To restart your browser,
+						<ul>
+							<li>type "<b>chrome://restart</b>" in the address line (you can copy it from here and paste there)</li>
+							<li>hit Enter on the keyboard or select the address line suggested by Chrome</li>
+							<li>wait a little - it takes a moment or two</li>
+						</ul>
+					</div>
+					<div class="modal-footer">
+						<!--<button class="btn btn-primary confirm">Yes</button>-->
+						<button href="#" data-dismiss="modal" class="btn btn-default">Got it</button>
 					</div>
 				</div>
 			</div>
@@ -156,5 +212,4 @@
   	</div>
 
 	</body>
-
 </html>
