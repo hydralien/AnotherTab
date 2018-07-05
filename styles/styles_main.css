@@ -1,16 +1,17 @@
-
 /* Bootstrap protection */
 
 * {
   -webkit-box-sizing: initial;
   -moz-box-sizing: initial;
-  box-sizing: initial; }
+  box-sizing: initial;
+}
 
 *:before,
 *:after {
   -webkit-box-sizing: initial;
   -moz-box-sizing: initial;
-  box-sizing: initial; }
+  box-sizing: initial;
+}
 
 body {
 		padding: 0;
@@ -26,6 +27,14 @@ html {
 }
 
 /* End Of Bootstrap protection and other black magic */
+
+:root {
+		--icon-size-multiplier: 1;
+		--icon-min-width: 60px;
+		--icon-max-width: var(--icon-min-width);
+		--icon-min-height: 60px;
+		--icon-max-height: var(--icon-min-height);
+}
 
 #full-content {
 		height:100%;
@@ -68,32 +77,42 @@ html {
 }
 
 #bookmarks {
-		position:absolute;
 		width:100%;
-		height:100%;
+		height:100vh;
 		overflow-y:auto;
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
 }
 
 .content {
-		max-height: 100%;
-		overflow-x: hidden;
-		overflow-y: hidden;
 		margin: 5px 70px;
 		padding: 5px;
-		margin-bottom: 50px;
 		z-index: 1;
 }
 
+#content-bookmarks, #content-extensions {
+		display: flex;
+		flex-wrap: wrap;
+}
+
 .icon-wrapper {
-	border: 10px solid transparent;
-	float: left;
+	margin: 10px;
 	text-align: center;
- display: flex;
+	display: flex;
+	flex: none;
 }
 
 .icon-wrapper a {
 		background-color: inherit;
 }
+
+/*
+.double-icon {
+		min-width: calc(var(--icon-width-min) * 2);
+		max-width: calc(var(--icon-width-max) * 2);
+}
+*/
 
 .icon {
 	text-align: center;
@@ -101,10 +120,11 @@ html {
 	border-radius: 5px;
 	padding: 10px;
 	overflow: hidden;
-	min-width: 60px;
-	max-width: 60px;
-	min-height: 60px;
-	max-height: 60px;
+	min-width: calc(var(--icon-min-width) * var(--icon-size-multiplier));
+	max-width: calc(var(--icon-max-width) * var(--icon-size-multiplier));
+	min-height: calc(var(--icon-min-height) * var(--icon-size-multiplier));
+	max-height: calc(var(--icon-max-height) * var(--icon-size-multiplier));
+
 	/* alignment */
 	cursor: pointer;
 	color: blue;

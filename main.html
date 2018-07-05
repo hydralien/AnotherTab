@@ -17,10 +17,6 @@
 		<script type="text/javascript" src="scripts/vue_dev.js"></script>
 		
 		<script type="text/javascript" src="scripts/markup.min.js"></script>
-		<script type="text/javascript" src="scripts/defaults.js"></script>
-		<script type="text/javascript" src="scripts/templates.js"></script>
-		<script type="text/javascript" src="scripts/config.js"></script>
-		<script type="text/javascript" src="scripts/core.js"></script>
 	</head>
 
 	<body>
@@ -29,11 +25,11 @@
 				<div id="menu">
 					<h3>Settings</h3>
 					<form id="settings-form">
-						<p>Icon size:</p>
-						<input type="text" id="setting_icon_size" value="32px"><br><span>Chrome default favicon size is 16px</span>
-						<p>Cell height:</p>
-						<input type="text" id="cell_height" v-model="cell_height.value">
-						<input type="range" min="10" max="250" step="1" id="cell_height_range" v-model="cell_height.value"><br><span>Use pixels (like '60px') or 'none' for auto</span>
+						<p>Icon size multiplier:</p>
+						<input type="text" id="icon_size_multiplier" v-model="settings.icon_size_multiplier.value">
+						<input type="range" min="0.1" max="10" step="0.1" id="icon_size_multiplier_range" v-model="settings.icon_size_multiplier.value">
+
+
 						<p>Cell width:</p>
 						<input type="text" id="setting_cell_width" value="60px"><br><span>Use pixels (like '60px') or 'none' for auto</span>
 						<p>Cell max width:</p>
@@ -119,7 +115,11 @@
 						<h4>Instructions</h4>
 						Unfortunately, apps cannot restart browser - users have to do it themselves. To restart your browser,
 						<ul>
-							<li>type "<b>chrome://restart</b>" in the address line (you can copy it from here and paste there)</li>
+							<li>
+								type following in the Chrome address line:
+								<input type="text" class="mb-2 mr-sm-2" id="copy-restart-command-text" value="chrome://restart" readonly/>
+								<button class="btn-primary" id="copy-restart-command-button">copy</button>
+							</li>
 							<li>hit Enter on the keyboard or select the address line suggested by Chrome</li>
 							<li>wait a little - it takes a moment or two</li>
 						</ul>
@@ -210,6 +210,12 @@
       	</div>
      	</div>
   	</div>
+
+		<script type="text/javascript" src="scripts/defaults.js"></script>
+		<script type="text/javascript" src="scripts/templates.js"></script>
+		<script type="text/javascript" src="scripts/config.js"></script>
+		<script type="text/javascript" src="scripts/core.js"></script>
+		<script type="module" src="scripts/modules/onload.js"></script>
 
 	</body>
 </html>

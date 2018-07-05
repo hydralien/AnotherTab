@@ -7,6 +7,9 @@ var config = {
     "css-target" : ".icon img",
     "css-key" : ["width", "height"]
   },
+  "icon_size_multiplier" : {
+    "value" : 1,
+  },
   "cell_height" : {
     "value" : "60px",
     "css-target" : ".icon",
