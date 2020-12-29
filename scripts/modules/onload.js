@@ -286,6 +286,6 @@ menuApp = new Vue({
 	data: config
 });
 
-toggleSettings();
+// toggleSettings();
 
 
